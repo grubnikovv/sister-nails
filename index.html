@@ -263,6 +263,31 @@ dialog::backdrop{background:rgba(5,10,22,.55);-webkit-backdrop-filter:blur(6px);
 .prog .terms li::before{content:"✦";color:var(--fuchsia);font-size:11px;line-height:2}
 .muted{color:var(--ink2);margin-top:22px}
 
+
+/* прайс студии */
+.pls{display:grid;gap:18px}
+@media(min-width:900px){.pls{grid-template-columns:repeat(2,1fr);gap:22px}}
+.pl{background:var(--card);border-radius:var(--r);padding:30px 28px 18px;box-shadow:0 1px 0 var(--line)}
+.pl h3{font:500 clamp(28px,2.8vw,34px)/1.1 var(--serif);margin-bottom:14px}
+.pl li{display:flex;align-items:baseline;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.pl__n{font-size:15.5px;line-height:1.35}
+.pl__n small{display:block;font-size:12.5px;color:var(--ink3);margin-top:3px}
+.pl li i{flex:1;min-width:12px;border-bottom:1px dotted color-mix(in srgb,var(--ink) 30%,transparent);transform:translateY(-4px)}
+.pl li b{font:500 22px/1 var(--serif);white-space:nowrap}
+.gift{margin-top:22px;display:grid;gap:28px;align-items:center;padding:clamp(28px,4vw,48px);border-radius:var(--r);background:var(--pink2);position:relative;overflow:hidden}
+@media(min-width:900px){.gift{grid-template-columns:1.2fr .8fr auto}}
+.gift h3{font:500 clamp(32px,3.6vw,46px)/1.05 var(--serif);margin:14px 0 12px}
+.gift h3 em{font-style:italic;color:var(--fuchsia)}
+.gift p{color:var(--ink2);max-width:32em}
+.gift__card{position:relative;aspect-ratio:1.6;max-width:320px;width:100%;border-radius:18px;padding:18px 20px;background:var(--bg);box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:flex-end;transform:rotate(-4deg);transition:transform .8s var(--ease)}
+.gift:hover .gift__card{transform:rotate(0) translateY(-4px)}
+.gift__card img{position:absolute;top:14px;right:16px;width:44%;height:auto}
+.gift__card b{font:500 40px/1 var(--serif)}
+.gift__card span{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-top:6px}
+.addr{display:grid;gap:14px;margin:30px 0 0;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.addr dt{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(243,233,240,.55)}
+.addr dd{margin:6px 0 0;font-size:16px}
+
 /* шаги */
 .steps{display:grid;gap:18px;counter-reset:s}
 @media(min-width:700px){.steps{grid-template-columns:repeat(2,1fr)}}
@@ -322,33 +347,33 @@ dialog::backdrop{background:rgba(5,10,22,.55);-webkit-backdrop-filter:blur(6px);
   <div class="wrap hdr__in">
     <a class="logo" href="#top" aria-label="Нейл Студия Мэй’Эйлин — на главную"><img class="logo__l" src="img/logo.webp" width="720" height="393" alt="Нейл Студия Мэй’Эйлин"><img class="logo__d" src="img/logo-dark.webp" width="720" height="393" alt="" aria-hidden="true"></a>
     <nav class="nav" aria-label="Разделы">
-      <a href="#obo-mne">Обо мне</a><a href="#kursy">Курсы</a><a href="#raboty">Работы</a><a href="#kak">Как проходит</a><a href="#kontakty">Контакты</a>
+      <a href="#studiya">Студия</a><a href="#kursy">Академия</a><a href="#raboty">Работы</a><a href="#obo-mne">Об Алине</a><a href="#kontakty">Контакты</a>
     </nav>
     <div class="hdr__r">
       <button class="ibtn" id="themeBtn" type="button" aria-label="Сменить тему">
         <svg class="theme-i--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.7 4.7l1.6 1.6M17.7 17.7l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.7 19.3l1.6-1.6M17.7 6.3l1.6-1.6"/></svg>
         <svg class="theme-i--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
       </button>
-      <a class="btn btn--sm" href="#kursy"><span>Выбрать курс</span></a>
+      <a class="btn btn--sm" href="#studiya"><span>Записаться</span></a>
       <button class="ibtn burger" id="burger" type="button" aria-label="Меню" aria-expanded="false" aria-controls="mnav"><span></span><span></span></button>
     </div>
   </div>
 </header>
 <nav class="mnav" id="mnav" aria-label="Меню">
-  <a href="#obo-mne">Обо мне</a><a href="#kursy">Курсы</a><a href="#raboty">Работы</a><a href="#kak">Как проходит</a><a href="#kontakty">Контакты</a>
-  <a class="btn" href="#kursy"><span>Выбрать курс</span></a>
+  <a href="#studiya">Студия</a><a href="#kursy">Академия</a><a href="#raboty">Работы</a><a href="#obo-mne">Об Алине</a><a href="#kontakty">Контакты</a>
+  <a class="btn" href="#studiya"><span>Записаться</span></a>
 </nav>
 
 <main id="top">
   <section class="hero">
     <div class="wrap hero__grid">
       <div>
-        <span class="eyebrow fade">Онлайн и офлайн-обучение</span>
-        <h1><span class="ln"><span>Стань</span></span><span class="ln"><span>профессионалом</span></span><span class="ln"><span>в маникюре</span></span><span class="ln"><span><em>и педикюре</em></span></span></h1>
-        <p class="lead fade">Современные техники маникюра и педикюра, секреты топ-мастеров и работа без отслоек. Для тех, кто начинает с нуля, и для практикующих мастеров.</p>
+        <span class="eyebrow fade">Маникюр · Педикюр · Обучение</span>
+        <h1><span class="ln"><span>Красивые ногти —</span></span><span class="ln"><span>для клиенток,</span></span><span class="ln"><span><em>профессия —</em></span></span><span class="ln"><span><em>для учениц</em></span></span></h1>
+        <p class="lead fade">Нейл Студия Мэй’Эйлин и A.S. Ногтевая академия Алины Грубниковой. Запишитесь на маникюр онлайн или освойте профессию мастера — с нуля, онлайн или лично.</p>
         <div class="hero__cta fade">
-          <a class="btn" href="#kursy"><span>Выбрать курс</span></a>
-          <a class="btn btn--ghost" href="#obo-mne"><span>Познакомиться</span></a>
+          <a class="btn" href="#studiya"><span>Записаться на маникюр</span></a>
+          <a class="btn btn--ghost" href="#kursy"><span>Выбрать курс</span></a>
         </div>
         <ul class="hero__stats fade">
           <li><b>5+</b><span>лет работы мастером</span></li>
@@ -367,7 +392,33 @@ dialog::backdrop{background:rgba(5,10,22,.55);-webkit-backdrop-filter:blur(6px);
     </div>
   </section>
 
-  <div class="marq" aria-hidden="true"><div class="marq__t"><div><span>Маникюр</span><i aria-hidden="true">✦</i><span>Педикюр</span><i aria-hidden="true">✦</i><span>Онлайн-курсы</span><i aria-hidden="true">✦</i><span>Офлайн-обучение</span><i aria-hidden="true">✦</i><span>Сертификат с печатью</span><i aria-hidden="true">✦</i><span>Поддержка после курса</span><i aria-hidden="true">✦</i><span>Материаловедение</span><i aria-hidden="true">✦</i><span>Визуал</span><i aria-hidden="true">✦</i></div><div><span>Маникюр</span><i aria-hidden="true">✦</i><span>Педикюр</span><i aria-hidden="true">✦</i><span>Онлайн-курсы</span><i aria-hidden="true">✦</i><span>Офлайн-обучение</span><i aria-hidden="true">✦</i><span>Сертификат с печатью</span><i aria-hidden="true">✦</i><span>Поддержка после курса</span><i aria-hidden="true">✦</i><span>Материаловедение</span><i aria-hidden="true">✦</i><span>Визуал</span><i aria-hidden="true">✦</i></div></div></div>
+  <div class="marq" aria-hidden="true"><div class="marq__t"><div><span>Маникюр</span><i aria-hidden="true">✦</i><span>Педикюр</span><i aria-hidden="true">✦</i><span>Онлайн-запись</span><i aria-hidden="true">✦</i><span>Подарочные сертификаты</span><i aria-hidden="true">✦</i><span>Онлайн-курсы</span><i aria-hidden="true">✦</i><span>Офлайн-обучение</span><i aria-hidden="true">✦</i><span>Сертификат с печатью</span><i aria-hidden="true">✦</i><span>Поддержка после курса</span><i aria-hidden="true">✦</i></div><div><span>Маникюр</span><i aria-hidden="true">✦</i><span>Педикюр</span><i aria-hidden="true">✦</i><span>Онлайн-запись</span><i aria-hidden="true">✦</i><span>Подарочные сертификаты</span><i aria-hidden="true">✦</i><span>Онлайн-курсы</span><i aria-hidden="true">✦</i><span>Офлайн-обучение</span><i aria-hidden="true">✦</i><span>Сертификат с печатью</span><i aria-hidden="true">✦</i><span>Поддержка после курса</span><i aria-hidden="true">✦</i></div></div></div>
+
+  <section class="sec" id="studiya">
+    <div class="wrap">
+      <div class="sec__head sec__head--split">
+        <div><span class="eyebrow rv">Нейл Студия Мэй’Эйлин</span><h2 class="h2 rv" style="--d:80ms">Услуги <em>и цены</em></h2></div>
+        <div class="rv" style="--d:140ms">
+          <p class="lead">Запишитесь онлайн в пару касаний: выберите услугу, день и время. Напомним о визите накануне.</p>
+          <div class="hero__cta" style="margin-top:24px"><a class="btn" href="#kontakty"><span>Записаться онлайн</span></a></div>
+        </div>
+      </div>
+      <div class="pls"><div class="pl rv" style="--d:0ms"><h3>Маникюр</h3><ul><li><span class="pl__n">Маникюр без покрытия<small>1 ч</small></span><i aria-hidden="true"></i><b>1 800 ₽</b></li><li><span class="pl__n">Маникюр с покрытием гель-лак<small>2 ч</small></span><i aria-hidden="true"></i><b>3 000 ₽</b></li><li><span class="pl__n">Маникюр, укрепление гелем и гель-лак<small>2 ч 30 мин</small></span><i aria-hidden="true"></i><b>3 500 ₽</b></li><li><span class="pl__n">Мужской маникюр<small>1 ч</small></span><i aria-hidden="true"></i><b>2 000 ₽</b></li></ul></div><div class="pl rv" style="--d:80ms"><h3>Наращивание</h3><ul><li><span class="pl__n">Наращивание, короткая и средняя длина<small>3 ч</small></span><i aria-hidden="true"></i><b>4 500 ₽</b></li><li><span class="pl__n">Наращивание, длинные ногти<small>3 ч 30 мин</small></span><i aria-hidden="true"></i><b>от 5 500 ₽</b></li><li><span class="pl__n">Коррекция наращивания<small>2 ч 30 мин</small></span><i aria-hidden="true"></i><b>4 000 ₽</b></li></ul></div><div class="pl rv" style="--d:0ms"><h3>Педикюр</h3><ul><li><span class="pl__n">Педикюр без покрытия (пальчики)<small>1 ч</small></span><i aria-hidden="true"></i><b>2 500 ₽</b></li><li><span class="pl__n">Педикюр с гель-лаком (пальчики)<small>1 ч 30 мин</small></span><i aria-hidden="true"></i><b>3 300 ₽</b></li><li><span class="pl__n">Полный педикюр без покрытия<small>1 ч 30 мин</small></span><i aria-hidden="true"></i><b>3 300 ₽</b></li><li><span class="pl__n">Полный педикюр с гель-лаком<small>2 ч</small></span><i aria-hidden="true"></i><b>4 200 ₽</b></li><li><span class="pl__n">Мужской педикюр<small>1 ч 30 мин</small></span><i aria-hidden="true"></i><b>3 500 ₽</b></li></ul></div><div class="pl rv" style="--d:80ms"><h3>Дизайн и уход</h3><ul><li><span class="pl__n">Френч<small></small></span><i aria-hidden="true"></i><b>500 ₽</b></li><li><span class="pl__n">Дизайн, 1 ноготь<small></small></span><i aria-hidden="true"></i><b>от 150 ₽</b></li><li><span class="pl__n">Снятие покрытия другого мастера<small>15 мин</small></span><i aria-hidden="true"></i><b>500 ₽</b></li><li><span class="pl__n">Ремонт ногтя<small>15 мин</small></span><i aria-hidden="true"></i><b>300 ₽</b></li><li><span class="pl__n">SPA-уход для рук<small>15 мин</small></span><i aria-hidden="true"></i><b>700 ₽</b></li><li><span class="pl__n">Парафинотерапия<small>20 мин</small></span><i aria-hidden="true"></i><b>800 ₽</b></li></ul></div>
+      </div>
+      <div class="gift rv">
+        <div>
+          <span class="eyebrow">Подарок</span>
+          <h3>Подарочный <em>сертификат</em></h3>
+          <p>На любую процедуру в студии. Номинал — 2&nbsp;000, 3&nbsp;000 или 5&nbsp;000&nbsp;₽, действует 3&nbsp;месяца. Оформите на сайте — пришлём красивый электронный сертификат.</p>
+        </div>
+        <div class="gift__card" aria-hidden="true">
+          <img class="logo__l" src="img/logo.webp" width="720" height="393" alt=""><img class="logo__d" src="img/logo-dark.webp" width="720" height="393" alt="">
+          <b>3&nbsp;000&nbsp;₽</b><span>Подарочный сертификат</span>
+        </div>
+        <a class="btn" href="#kontakty"><span>Подарить сертификат</span></a>
+      </div>
+    </div>
+  </section>
 
   <section class="sec about" id="obo-mne">
     <div class="wrap about__grid">
@@ -396,7 +447,7 @@ dialog::backdrop{background:rgba(5,10,22,.55);-webkit-backdrop-filter:blur(6px);
   <section class="sec adv" id="pochemu">
     <div class="wrap">
       <div class="sec__head sec__head--split">
-        <div><span class="eyebrow rv">Преимущества</span><h2 class="h2 rv" style="--d:80ms">Почему учиться <em>у меня</em></h2></div>
+        <div><span class="eyebrow rv">Академия · преимущества</span><h2 class="h2 rv" style="--d:80ms">Почему учиться <em>у меня</em></h2></div>
         <p class="lead rv" style="--d:140ms">Освойте современные техники маникюра и педикюра, чтобы стать востребованным специалистом.</p>
       </div>
       <ul class="adv__list">
@@ -413,7 +464,7 @@ dialog::backdrop{background:rgba(5,10,22,.55);-webkit-backdrop-filter:blur(6px);
   <section class="sec" id="kursy">
     <div class="wrap">
       <div class="sec__head sec__head--split">
-        <div><span class="eyebrow rv">Курсы и стоимость</span><h2 class="h2 rv" style="--d:80ms">Выберите <em>свой курс</em></h2></div>
+        <div><span class="eyebrow rv">A.S. Ногтевая академия</span><h2 class="h2 rv" style="--d:80ms">Выберите <em>свой курс</em></h2></div>
         <div class="rv" style="--d:140ms">
           <p class="lead">С нуля или повышение квалификации, онлайн или лично. В каждом курсе — сертификат с печатью и поддержка после обучения.</p>
         </div>
@@ -634,8 +685,9 @@ dialog::backdrop{background:rgba(5,10,22,.55);-webkit-backdrop-filter:blur(6px);
         <div class="cta__grid">
           <div>
             <span class="eyebrow rv">Контакты</span>
-            <h2 class="h2 rv" style="--d:80ms">Запишитесь <em>на курс</em></h2>
-            <p class="lead rv" style="--d:140ms">Ответим на все вопросы о курсах и поможем выбрать программу под ваш уровень.</p>
+            <h2 class="h2 rv" style="--d:80ms">Запишитесь <em>к Алине</em></h2>
+            <p class="lead rv" style="--d:140ms">Запишем на процедуру, ответим на вопросы о курсах и поможем выбрать программу под ваш уровень.</p>
+            <dl class="addr rv" style="--d:180ms"><div><dt>Адрес студии</dt><dd>Москва, точный адрес — при записи</dd></div><div><dt>Часы работы</dt><dd>Ежедневно, 10:00–21:00</dd></div></dl>
           </div>
           <div class="links rv" style="--d:200ms">
             <a href="https://t.me/alina_sergeevna28" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.4 4.2 2.9 11.3c-1.2.5-1.2 1.2-.2 1.5l4.7 1.5 1.8 5.6c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.7c.3-1.3-.5-1.9-1.4-1.5ZM8.9 14l8.5-5.4c.4-.3.8-.1.5.2l-7.3 6.6-.3 3-1.4-4.4Z"/></svg><span><b>Telegram</b><small>@alina_sergeevna28</small></span><span class="arr">→</span></a>
@@ -653,7 +705,7 @@ dialog::backdrop{background:rgba(5,10,22,.55);-webkit-backdrop-filter:blur(6px);
   <div class="wrap">
     <div class="ftr__grid">
       <a class="logo logo--big" href="#top" aria-label="Наверх"><img class="logo__l" src="img/logo.webp" width="720" height="393" alt="Нейл Студия Мэй’Эйлин"><img class="logo__d" src="img/logo-dark.webp" width="720" height="393" alt="" aria-hidden="true"></a>
-      <nav aria-label="Разделы"><a href="#obo-mne">Обо мне</a><a href="#kursy">Курсы</a><a href="#raboty">Работы</a><a href="#kak">Как проходит</a><a href="#kontakty">Контакты</a></nav>
+      <nav aria-label="Разделы"><a href="#studiya">Студия</a><a href="#kursy">Академия</a><a href="#raboty">Работы</a><a href="#obo-mne">Об Алине</a><a href="#kontakty">Контакты</a></nav>
       <div>ИП Грубникова Алина Сергеевна<br>ИНН 345600043182 · ОГРНИП 325344300003940</div>
     </div>
     <small>* Instagram принадлежит компании Meta, признанной экстремистской организацией и запрещённой на территории РФ.</small>
