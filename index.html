@@ -323,6 +323,9 @@ dialog::backdrop{background:rgba(5,10,22,.55);-webkit-backdrop-filter:blur(6px);
 .ftr nav{display:flex;flex-wrap:wrap;gap:10px 24px}
 .ftr nav a{text-decoration:none}
 .ftr nav a:hover{color:var(--ink)}
+.ftr__end{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 24px}
+.ftr__adm{font-size:12px;color:var(--ink3);text-decoration:none;margin-top:22px}
+.ftr__adm:hover{color:var(--ink)}
 .ftr small{display:block;font-size:12px;color:var(--ink3);margin-top:22px;max-width:56em}
 
 /* появление при прокрутке */
@@ -707,11 +710,11 @@ dialog::backdrop{background:rgba(5,10,22,.55);-webkit-backdrop-filter:blur(6px);
   <div class="wrap">
     <div class="ftr__grid">
       <a class="logo logo--big" href="#top" aria-label="Наверх"><img class="logo__l" src="img/logo.webp" width="720" height="393" alt="Нейл Студия Мэй’Эйлин"><img class="logo__d" src="img/logo-dark.webp" width="720" height="393" alt="" aria-hidden="true"></a>
-      <nav aria-label="Разделы"><a href="#studiya">Студия</a><a href="#kursy">Академия</a><a href="#raboty">Работы</a><a href="#obo-mne">Об Алине</a><a href="#kontakty">Контакты</a><a href="#kabinet">Личный кабинет</a><a href="#master">Кабинет мастера</a></nav>
+      <nav aria-label="Разделы"><a href="#studiya">Студия</a><a href="#kursy">Академия</a><a href="#raboty">Работы</a><a href="#obo-mne">Об Алине</a><a href="#kontakty">Контакты</a><a href="#kabinet">Личный кабинет</a></nav>
       <div>ИП Грубникова Алина Сергеевна<br>ИНН 345600043182 · ОГРНИП 325344300003940</div>
     </div>
     <small>* Instagram принадлежит компании Meta, признанной экстремистской организацией и запрещённой на территории РФ.</small>
-    <small>© <span id="yr">2026</span> Нейл Студия Мэй’Эйлин · A.S. Ногтевая академия</small>
+    <div class="ftr__end"><small>© <span id="yr">2026</span> Нейл Студия Мэй’Эйлин · A.S. Ногтевая академия</small><a class="ftr__adm" href="#master">Вход для мастера</a></div>
   </div>
 </footer>
 
@@ -924,7 +927,7 @@ textarea:focus,.inp:focus,select:focus{border-color:var(--fuchsia);box-shadow:0 
 
   function shell(title,sub,tabs){
     var demo='<div class="app__demo"><span><b>Демо-режим</b> — вход по телефону появится на хостинге.</span><button type="button" data-act="reset">Сбросить демо</button></div>';
-    var who='<nav class="who" aria-label="Кабинеты"><a href="#kabinet"'+(view.who==='kabinet'?' aria-current="page"':'')+'>Клиентка и ученица</a><a href="#master"'+(view.who==='master'?' aria-current="page"':'')+'>Мастер</a></nav>';
+    var who=view.who==='master'?'<a class="btn btn--ghost btn--sm" href="#top"><span>На сайт</span></a>':'';
     var t='<div class="atabs" role="tablist">'+tabs.map(function(x){return '<button type="button" role="tab" data-tab="'+x[0]+'" aria-selected="'+(view.tab===x[0])+'">'+x[1]+(x[2]?'<span class="cnt">'+x[2]+'</span>':'')+'</button>'}).join('')+'</div>';
     return demo+'<div class="app__head"><div><h1>'+title+'</h1><p>'+sub+'</p></div>'+who+'</div>'+t+'<div class="pane" id="pane"></div>';
   }
