@@ -4,3 +4,4 @@ server/data/
 # сборка
 out/
 preview/
+scripts/site/out/
