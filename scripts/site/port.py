@@ -277,3 +277,31 @@ L = re.sub(r'<a [^>]*><img src="img/map.webp"[^>]*>.*?</a>', '', L, count=1, fla
 L = L.replace('Три курса в студии «Мэй’Эйлин»: маникюр, педикюр и наращивание.', 'Три курса лично с Алиной: основы маникюра, основы педикюра и маникюр + педикюр с нуля.')
 open(REPO + 'index.html', 'w', encoding='utf-8').write(L)
 print('step8 ok')
+
+# ---------- 9. строгий «журнальный» стиль для всех страниц мамы ----------
+L = open(REPO + 'index.html', encoding='utf-8').read()
+head_end = L.find('<header')
+css_part, rest = L[:head_end], L[head_end:]
+css_part = re.sub(r'border-radius:\s*(?:[89]|1\d|2[0-6])px', 'border-radius: 2px', css_part)
+css_part = css_part.replace('border-radius: 999px', 'border-radius: 2px')
+css_part = css_part.replace('--bg: #ECEDEF;', '--bg: #F4F4F6;').replace('--line: #DADCE2;', '--line: #E1E2E7;')
+EDITORIAL = '''
+/* ===== строгий стиль (как у премиальных бьюти-брендов) ===== */
+.btn{border-radius:0!important;font-weight:500!important;font-size:12px!important;letter-spacing:.18em;text-transform:uppercase;padding:17px 30px;border:1px solid var(--lac)}
+.btn.sm{padding:13px 20px;font-size:11px!important}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none;border:1px solid var(--ink)}
+.btn.glow::after{display:none}
+.btn.glow:hover{box-shadow:none;background:var(--ink);opacity:.9}
+.card{border-radius:0;box-shadow:none}
+.hdr{background:color-mix(in srgb,var(--paper) 92%,transparent)}
+.hdr .btn{padding:13px 22px}
+h1,h2,.h2{font-weight:500}
+.eyebrow{letter-spacing:.24em!important;font-weight:500!important}
+.chip{border-radius:0!important}
+.mbar .btn{width:100%}
+'''
+last_style_end = css_part.rfind('</style>')
+css_part = css_part[:last_style_end] + EDITORIAL + css_part[last_style_end:]
+L = css_part + rest
+open(REPO + 'index.html', 'w', encoding='utf-8').write(L)
+print('step9 ok')

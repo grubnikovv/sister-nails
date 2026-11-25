@@ -51,34 +51,37 @@ C = [  # id, title, fmt, level, price, short, groups, terms, extra
 
 def money(n): return f"{n:,}".replace(",", "\u202f") + "\u00a0₽"
 E = html.escape
+def pic(name, alt, cls="", sizes="(max-width: 700px) 90vw, 480px", eager=False, w=960, h=1280):
+    return (f'<img class="{cls}" src="img/{name}-960.webp" srcset="img/{name}-480.webp 480w, img/{name}-960.webp 960w" '
+            f'sizes="{sizes}" width="{w}" height="{h}" alt="{E(alt)}" ' + ('fetchpriority="high"' if eager else 'loading="lazy"') + ' decoding="async">')
 FMT = {"online": "Онлайн", "offline": "Офлайн"}
 
+COVER = {"mani": "nails-nude", "pedi": "pedicure-blue", "duo": "nails-wine", "speed-mani": "nails-black", "speed-pedi": "pedicure-blue",
+         "mater": "nails-milk", "visual": "nails-wine", "mani-off": "nails-milk", "pedi-off": "pedicure-blue", "duo-off": "nails-black"}
 def card(c, i):
     prog = ""
+    n = 0
     for title, items in c["g"]:
+        n += len(items)
         prog += (f'<h4>{E(title)}</h4>' if title else '') + '<ol>' + ''.join(f'<li>{E(x)}</li>' for x in items) + '</ol>'
     if not c["g"]:
         prog = '<p class="muted">Подробная программа скоро появится здесь. Напишите Алине — она расскажет обо всём лично.</p>'
     terms = ''.join(f'<li>{E(x)}</li>' for x in c["terms"])
     if terms: prog += '<h4>Условия</h4><ul class="terms">' + terms + '</ul>'
-    facts = ''.join(f'<li>{E(x)}</li>' for x in c["facts"])
     best = c.get("best")
     btn = "Купить курс" if c["f"] == "online" else "Записаться"
+    meta = [FMT[c['f']], c['lv']] + ([f"{n} тем"] if n else []) + [c['facts'][0]]
+    old = f'<s>{money(c["old"])}</s>' if c.get('old') else ''
+    w, h = (1280, 1132) if COVER[c['id']] == 'pedicure-blue' else (960, 1280)
     return f'''
-      <article class="course{' course--best' if best else ''}{' course--wide' if c.get('wide') else ''} rv" data-fmt="{c['f']}" data-id="{c['id']}" style="--d:{(i % 3) * 70}ms">
-        <div class="course__top">
-          <span class="chip chip--{c['f']}">{FMT[c['f']]}</span><span class="course__lv">{E(c['lv'])}</span>
-          {'<span class="course__best">Выгодно</span>' if best else ''}
-        </div>
+      <article class="course{' course--best' if best else ''}{' course--wide' if c.get('wide') else ''} rv" data-fmt="{c['f']}" data-id="{c['id']}" style="--d:{(i % 3) * 80}ms">
+        <div class="course__img">{pic(COVER[c['id']], c['t'], '', '(max-width: 700px) 92vw, 400px', w=w, h=h)}{'<span class="course__flag">Выгодно</span>' if best else ''}</div>
+        <div class="course__meta"><span class="chip">{FMT[c['f']]}</span>{' · '.join(E(x) for x in meta[1:])}</div>
         <h3 class="course__t">{E(c['t'])}</h3>
         <p class="course__d">{E(c['d'])}</p>
-        <ul class="course__facts">{facts}</ul>
-        <div class="course__bottom">
-          <div class="course__price">{money(c['p'])}{f'<s title="Если покупать курсы по отдельности">{money(c["old"])}</s>' if c.get('old') else ''}</div>
-          <div class="course__btns">
-            <button class="btn btn--ghost btn--sm" type="button" data-open="{c['id']}">Программа</button>
-            <a class="btn btn--sm" href="#kontakty" data-buy="{c['id']}"><span>{btn}</span></a>
-          </div>
+        <div class="course__foot">
+          <div class="course__price">{money(c['p'])}{old}</div>
+          <div class="course__btns"><button class="lnk" type="button" data-open="{c['id']}">Программа</button><a class="btn btn--sm" href="#kontakty" data-buy="{c['id']}"><span>{btn}</span></a></div>
         </div>
         <template class="course__prog"><div class="prog">{prog}</div></template>
       </article>'''
@@ -113,9 +116,6 @@ ICON_IG = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="curre
 
 WA = "https://wa.me/79362872201?text=" + "%D0%94%D0%BE%D0%B1%D1%80%D1%8B%D0%B9%20%D0%B4%D0%B5%D0%BD%D1%8C%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B0%D1%82%D1%8C%D1%81%D1%8F%20%D0%BD%D0%B0%20%D0%BE%D0%B1%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5."
 
-def pic(name, alt, cls="", sizes="(max-width: 700px) 90vw, 480px", eager=False, w=960, h=1280):
-    return (f'<img class="{cls}" src="img/{name}-960.webp" srcset="img/{name}-480.webp 480w, img/{name}-960.webp 960w" '
-            f'sizes="{sizes}" width="{w}" height="{h}" alt="{E(alt)}" ' + ('fetchpriority="high"' if eager else 'loading="lazy"') + ' decoding="async">')
 
 SVC = [  # ориентир по рынку Москвы, позже Алина поменяет
  ("Маникюр", [("Маникюр без покрытия", 1800, 60, False), ("Маникюр с покрытием гель-лак", 3000, 120, False),
@@ -138,10 +138,15 @@ for i, (cat, items) in enumerate(SVC):
     svc += f'<div class="pl rv" style="--d:{(i % 2) * 80}ms"><h3>{E(cat)}</h3><ul>{rows}</ul></div>'
 
 __import__('os').makedirs(__import__('os').path.join(__import__('os').path.dirname(__import__('os').path.abspath(__file__)),'out'), exist_ok=True)
+EXP = [("nails-wine", "Гель-лак", "от 3 000 ₽"), ("nails-nude", "Френч", "+ 500 ₽"), ("nails-milk", "Укрепление гелем", "3 500 ₽"),
+       ("pedicure-blue", "Педикюр", "от 2 500 ₽"), ("nails-black", "Наращивание", "от 4 500 ₽")]
+explore = ''.join(f'<a href="#kabinet/zapis"><figure>{pic(f, n, "", "(max-width: 700px) 60vw, 260px", w=(1280 if f=="pedicure-blue" else 960), h=(1132 if f=="pedicure-blue" else 1280))}</figure><b>{E(n)}</b><span>{E(p)}</span></a>' for f, n, p in EXP)
+steps = ''.join(f'''
+        <li class="step rv" style="--d:{i * 90}ms"><span class="step__n">0{i + 1}</span><h3>{E(t)}</h3><p>{E(d)}</p></li>''' for i, (t, d) in enumerate(STEPS))
 page = open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'tpl.html'), encoding='utf-8').read()
 for k, v in dict(APP=open(__import__('os').path.join(__import__('os').path.dirname(__import__('os').path.abspath(__file__)),'app.html'),encoding='utf-8').read().replace('__SVC_JSON__', __import__('json').dumps([[c,[[n,p,m,fr] for n,p,m,fr in it]] for c,it in SVC],ensure_ascii=False)), SVC=svc, CARDS_ON=cards_on, CARDS_OFF=cards_off, ADV=adv, STEPS=steps, MARQ=marq, TG=ICON_TG, WAI=ICON_WA, MAIL=ICON_MAIL, IG=ICON_IG, WA=WA,
                  P_ALINA=pic("alina", "Алина Грубникова — преподаватель маникюра и педикюра", "about__img"),
-                 P_HERO=pic("nails-wine", "Маникюр Алины: бордовое покрытие", "hero__img", "(max-width: 700px) 80vw, 520px", True),
+                 P_HERO=pic("nails-wine", "Маникюр Алины: бордовое покрытие", "", "100vw", True), EXPLORE=explore, T1=pic("nails-black", "Маникюр в студии Мэй’Эйлин", "", "(max-width: 800px) 100vw, 50vw"), T2=pic("alina", "Алина Грубникова — преподаватель", "", "(max-width: 800px) 100vw, 50vw"),
                  P_HERO2=pic("nails-nude", "Маникюр: нюдовое покрытие с френчем", "hero__img2", "(max-width: 700px) 40vw, 240px"),
                  G1=pic("nails-black", "Работа Алины: чёрный маникюр", "", "(max-width: 700px) 70vw, 380px"),
                  G2=pic("nails-milk", "Работа Алины: молочный маникюр", "", "(max-width: 700px) 70vw, 380px"),
