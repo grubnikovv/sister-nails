@@ -3,3 +3,4 @@ server/config.php
 server/data/
 # сборка
 out/
+preview/

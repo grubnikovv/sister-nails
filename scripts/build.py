@@ -4,10 +4,10 @@ import os, re, shutil, sys
 
 SRC = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(SRC, 'out')
-DOMAIN = os.environ.get('DOMAIN', 'ma-nails.ru')
+DOMAIN = os.environ.get('DOMAIN', 'academy-nail.ru')
 
 s = open(os.path.join(SRC, 'index.html'), encoding='utf-8').read()
-m = re.search(r'<title>(.*?)</title>', s); title = m.group(1) if m else 'М.А'
+m = re.search(r'<title>(.*?)</title>', s); title = m.group(1) if m else 'A.S.'
 if m: s = s.replace(m.group(0), '', 1)
 s = s.replace('<meta name="claude:viewport-fit-sides" content="cover">', '')
 s = re.sub(r'<meta name="robots" content="[^"]*">', '', s)  # рабочий сайт — открыт для Яндекса и Google
