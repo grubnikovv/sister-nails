@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Черновик 3 — Лампа</title><meta name="robots" content="noindex">
+<style>
+@font-face{font-family:Cormorant;font-weight:500 600;font-display:swap;src:url(../fonts/cormorant-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F}
+@font-face{font-family:Cormorant;font-weight:500 600;font-display:swap;src:url(../fonts/cormorant-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Cormorant;font-style:italic;font-weight:500;font-display:swap;src:url(../fonts/cormorant-italic-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F}
+@font-face{font-family:Onest;font-weight:300 600;font-display:swap;src:url(../fonts/onest-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F}
+@font-face{font-family:Onest;font-weight:300 600;font-display:swap;src:url(../fonts/onest-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20BD}
+:root{--bg:#ECEDEF;--ink:#0E1A33;--ink2:#4B5468;--line:rgba(14,26,51,.12);--fu:#D4006F;--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.55 Onest,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+canvas{position:fixed;display:block;touch-action:none}
+.top::before{content:"";position:absolute;inset:0 0 -30px;background:linear-gradient(rgba(236,237,239,.85),rgba(236,237,239,0));z-index:-1}
+.top{position:fixed;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:14px clamp(16px,5vw,56px);z-index:3}
+.top img{height:50px;width:auto}
+.btn{display:inline-flex;align-items:center;height:48px;padding:0 24px;border-radius:999px;background:var(--ink);color:#fff;text-decoration:none;font:500 15px Onest,sans-serif}
+.btn--g{background:rgba(255,255,255,.7);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.txt{position:fixed;z-index:2;left:clamp(16px,5vw,56px);right:clamp(16px,5vw,56px);bottom:calc(24px + env(safe-area-inset-bottom))}
+.eb{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2)}
+h1{font:500 clamp(40px,7.4vw,100px)/.96 Cormorant,Georgia,serif;letter-spacing:-.02em;margin:12px 0 18px;max-width:9em}
+h1 em{font-style:italic;background:linear-gradient(100deg,#8A7F86 0%,#8A7F86 40%,#D4006F 50%,#FF7DC1 55%,#D4006F 60%,#D4006F 100%);background-size:300% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;color:transparent;transition:background-position 2.4s var(--ease)}
+.cured h1 em{background-position:0 0}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.timer{position:fixed;z-index:3;display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:999px;background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 10px 30px -12px rgba(14,26,51,.3);font-size:14px}
+.timer b{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;font:500 15px Onest,sans-serif}
+.cured .timer b{background:var(--fu)}
+@media(max-width:799px){.timer{top:76px;left:50%;transform:translateX(-50%);white-space:nowrap}}
+@media(min-width:800px){.txt{right:auto;width:42%;bottom:auto;top:50%;transform:translateY(-50%)}.timer{right:clamp(16px,5vw,56px);bottom:36px}}
+</style></head><body>
+<canvas id="c" aria-hidden="true"></canvas>
+<div class="top"><img src="../img/logo.webp" alt="Нейл Студия Мэй’Эйлин"><a class="btn" href="../#zapis">Записаться</a></div>
+<div class="timer"><b id="tm">60</b><span id="tt">ведите лампой по фото</span></div>
+<div class="txt"><div class="eb">Маникюр · педикюр · обучение</div>
+  <h1>Из лампы&nbsp;— <em>сразу в&nbsp;глянец</em></h1>
+  <div class="row"><a class="btn" href="../#zapis">Записаться онлайн</a><a class="btn btn--g" href="../#kursy">Курсы академии</a></div></div>
+<script>
+(function(){
+var cv=document.getElementById('c'),x=cv.getContext('2d'),img=new Image(),matte,gloss,mask,mx,W,H,R,dpr=Math.min(devicePixelRatio||1,1.5);
+var lamp={x:0,y:0,tx:0,ty:0},auto=true,cov=0,done=false,t0=performance.now(),last=0;
+img.src='../img/nails-wine-960.webp';img.onload=function(){size();requestAnimationFrame(draw)};
+function rect(){var w=innerWidth,h=innerHeight;return w<800?{x:0,y:0,w:w,h:Math.round(h*.6)}:{x:Math.round(w*.46),y:0,w:w-Math.round(w*.46),h:h}}
+function size(){R=rect();W=Math.round(R.w*dpr);H=Math.round(R.h*dpr);cv.width=W;cv.height=H;cv.style.left=R.x+'px';cv.style.top=R.y+'px';cv.style.width=R.w+'px';cv.style.height=R.h+'px';
+  // кадр «cover»
+  var k=Math.max(W/img.width,H/img.height),dw=img.width*k,dh=img.height*k,ox=(W-dw)/2,oy=(H-dh)/2;
+  gloss=document.createElement('canvas');gloss.width=W;gloss.height=H;var g=gloss.getContext('2d');g.drawImage(img,ox,oy,dw,dh);
+  var d=g.getImageData(0,0,W,H),p=d.data,m=new Uint8ClampedArray(p.length);
+  for(var i=0;i<p.length;i+=4){var r=p[i],gg=p[i+1],b=p[i+2],l=.3*r+.59*gg+.11*b;
+    // матовое: меньше насыщенности и контраста, светлее, «зерно»
+    var n=(Math.random()-.5)*14;m[i]=l+(r-l)*.35+(200-l)*.22+n;m[i+1]=l+(gg-l)*.35+(200-l)*.22+n;m[i+2]=l+(b-l)*.35+(200-l)*.22+n;m[i+3]=255;
+    // глянцевое: чуть сочнее и контрастнее
+    p[i]=Math.min(255,(r-128)*1.12+132+(r-l)*.25);p[i+1]=Math.min(255,(gg-128)*1.12+128+(gg-l)*.25);p[i+2]=Math.min(255,(b-128)*1.12+130+(b-l)*.25)}
+  g.putImageData(d,0,0);matte=document.createElement('canvas');matte.width=W;matte.height=H;matte.getContext('2d').putImageData(new ImageData(m,W,H),0,0);
+  mask=document.createElement('canvas');mask.width=W;mask.height=H;mx=mask.getContext('2d');cov=0;done=false;document.body.classList.remove('cured');
+  lamp.x=lamp.tx=W*.2;lamp.y=lamp.ty=H*.15}
+addEventListener('resize',function(){if(img.complete)size()});
+function loc(e){return{x:(e.clientX-R.x)*dpr,y:(e.clientY-R.y)*dpr}}
+cv.addEventListener('pointerdown',function(e){auto=false;var p=loc(e);lamp.tx=p.x;lamp.ty=p.y;cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',function(e){if(e.pointerType==='mouse'||e.buttons){auto=false;var p=loc(e);lamp.tx=p.x;lamp.ty=p.y}});
+var tm=document.getElementById('tm'),tt=document.getElementById('tt');
+function draw(now){var t=(now-t0)/1000;
+  if(auto){var u=t*.42;lamp.tx=W*(.5+.38*Math.sin(u*2.1));lamp.ty=H*(.1+.8*((u*.22)%1))}
+  lamp.x+=(lamp.tx-lamp.x)*.12;lamp.y+=(lamp.ty-lamp.y)*.12;
+  var rad=Math.min(W,H)*.2;
+  if(!done){var gr=mx.createRadialGradient(lamp.x,lamp.y+rad*.35,rad*.2,lamp.x,lamp.y+rad*.35,rad);gr.addColorStop(0,'rgba(0,0,0,.35)');gr.addColorStop(1,'rgba(0,0,0,0)');mx.fillStyle=gr;mx.fillRect(lamp.x-rad,lamp.y-rad*.7,rad*2,rad*2.2);
+    if(now-last>400){last=now;var a=mx.getImageData(0,0,W,H).data,on=0,c=0;for(var i=3;i<a.length;i+=4*97){c++;if(a[i]>200)on++}cov=on/c;
+      var s=Math.max(0,Math.round(60*(1-cov/.82)));tm.textContent=s;if(s<=0){done=true;document.body.classList.add('cured');tm.textContent='✓';tt.textContent='готово — глянец на 3 недели'}else tt.textContent=auto?'лампа сушит покрытие…':'ведите лампой по фото'}}
+  x.globalCompositeOperation='source-over';x.drawImage(matte,0,0);
+  // глянец через маску
+  var tmp=draw.tmp||(draw.tmp=document.createElement('canvas'));if(tmp.width!==W){tmp.width=W;tmp.height=H}var tx=tmp.getContext('2d');
+  tx.globalCompositeOperation='source-over';tx.clearRect(0,0,W,H);tx.drawImage(gloss,0,0);
+  // бегущий блик
+  var sx=((t*.25)%1.6-.3)*W;var sg=tx.createLinearGradient(sx-W*.15,0,sx+W*.15,H*.3);sg.addColorStop(0,'rgba(255,255,255,0)');sg.addColorStop(.5,'rgba(255,255,255,.28)');sg.addColorStop(1,'rgba(255,255,255,0)');
+  tx.fillStyle=sg;tx.fillRect(0,0,W,H);
+  tx.globalCompositeOperation='destination-in';if(done){tx.fillStyle='#000';tx.globalAlpha=1}else tx.drawImage(mask,0,0);
+  x.drawImage(tmp,0,0);
+  // лампа
+  if(!done||auto&&false){x.save();x.translate(lamp.x,lamp.y);
+    var glow=x.createRadialGradient(0,rad*.45,4,0,rad*.45,rad*1.1);glow.addColorStop(0,'rgba(200,160,255,.45)');glow.addColorStop(1,'rgba(200,160,255,0)');x.fillStyle=glow;x.beginPath();x.arc(0,rad*.45,rad*1.1,0,7);x.fill();
+    x.lineWidth=rad*.16;x.lineCap='round';x.strokeStyle='rgba(255,255,255,.96)';x.shadowColor='rgba(150,100,255,.9)';x.shadowBlur=30*dpr;
+    x.beginPath();x.moveTo(-rad*.8,rad*.55);x.lineTo(-rad*.8,0);x.arc(0,0,rad*.8,Math.PI,0);x.lineTo(rad*.8,rad*.55);x.stroke();x.shadowBlur=0;
+    for(var k=0;k<9;k++){var ang=Math.PI+Math.PI*k/8;x.fillStyle=k%2?'#B892FF':'#fff';x.beginPath();x.arc(Math.cos(ang)*rad*.62,Math.sin(ang)*rad*.62,rad*.045,0,7);x.fill()}
+    x.restore()}
+  requestAnimationFrame(draw)}
+})();
+</script>
+</body></html>

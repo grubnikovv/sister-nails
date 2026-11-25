@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Черновик 2 — Накрась сама</title><meta name="robots" content="noindex">
+<style>
+@font-face{font-family:Cormorant;font-weight:500 600;font-display:swap;src:url(../fonts/cormorant-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F}
+@font-face{font-family:Cormorant;font-weight:500 600;font-display:swap;src:url(../fonts/cormorant-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Cormorant;font-style:italic;font-weight:500;font-display:swap;src:url(../fonts/cormorant-italic-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F}
+@font-face{font-family:Onest;font-weight:300 600;font-display:swap;src:url(../fonts/onest-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F}
+@font-face{font-family:Onest;font-weight:300 600;font-display:swap;src:url(../fonts/onest-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20BD}
+:root{--bg:#ECEDEF;--ink:#0E1A33;--ink2:#4B5468;--line:rgba(14,26,51,.12);--fu:#D4006F;--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{background:radial-gradient(120% 80% at 70% 30%,#F7E3F0 0,#ECEDEF 55%);color:var(--ink);font:400 16px/1.55 Onest,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.top{position:fixed;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:14px clamp(16px,5vw,56px);z-index:3}
+.top img{height:50px;width:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;border-radius:999px;border:0;background:var(--ink);color:#fff;text-decoration:none;font:500 15px Onest,sans-serif;cursor:pointer;transition:transform .4s var(--ease),opacity .4s}
+.btn--g{background:rgba(255,255,255,.7);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.btn--sm{height:40px;padding:0 16px;font-size:14px}
+.btn:active{transform:scale(.96)}
+.btn.pulse{animation:pulse 1.4s var(--ease) infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(212,0,111,.18)}}
+.txt{position:fixed;z-index:2;left:clamp(16px,5vw,56px);right:clamp(16px,5vw,56px);bottom:calc(24px + env(safe-area-inset-bottom));pointer-events:none}
+.eb{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2)}
+h1{font:500 clamp(40px,7.4vw,96px)/.96 Cormorant,Georgia,serif;letter-spacing:-.02em;margin:12px 0 18px;max-width:9em}
+h1 em{font-style:italic;color:var(--c,var(--fu));transition:color .8s}
+.row{display:flex;flex-wrap:wrap;gap:10px;pointer-events:auto}
+.tools{position:fixed;z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px}
+.pal{display:flex;gap:8px;padding:6px;border-radius:999px;background:rgba(255,255,255,.75);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 10px 30px -12px rgba(14,26,51,.25)}
+.pal button{width:30px;height:30px;border-radius:50%;border:0;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);transition:transform .4s var(--ease)}
+.pal button[aria-pressed="true"]{transform:scale(1.18);box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--ink)}
+.acts{display:flex;gap:8px}
+.msg{position:fixed;z-index:3;font:italic 500 19px/1.3 Cormorant,serif;color:var(--ink2);text-align:center;transition:opacity .5s}
+@media(max-width:799px){.tools{top:76px;left:0;right:0}.msg{top:58%;left:16px;right:16px}.acts{position:fixed;top:61%;left:0;right:0;justify-content:center}}
+@media(min-width:800px){.txt{right:auto;width:44%;bottom:auto;top:50%;transform:translateY(-50%)}.tools{right:7%;bottom:44px;width:40%}.msg{right:7%;width:40%;top:92px}}
+</style></head><body>
+<canvas id="c" aria-label="Ноготь — проведите пальцем, чтобы накрасить"></canvas>
+<div class="top"><img src="../img/logo.webp" alt="Нейл Студия Мэй’Эйлин"><a class="btn" href="../#zapis">Записаться</a></div>
+<div class="msg" id="msg">проведите пальцем по ногтю</div>
+<div class="tools"><div class="pal" id="pal" role="group" aria-label="Оттенок"></div>
+  <div class="acts"><button class="btn btn--g btn--sm" type="button" id="bLamp">В лампу</button><button class="btn btn--g btn--sm" type="button" id="bFr">Френч</button><button class="btn btn--g btn--sm" type="button" id="bRe">Заново</button></div></div>
+<div class="txt"><div class="eb">Маникюр · педикюр · обучение</div>
+  <h1>Идеальный маникюр&nbsp;— <em>за&nbsp;пару касаний</em></h1>
+  <div class="row"><a class="btn" href="../#zapis">Записаться онлайн</a><a class="btn btn--g" href="../#kursy">Курсы академии</a></div></div>
+<script>
+(function(){
+var SH=[['фуксия','#D4006F'],['пудровый','#F2B3D3'],['бордо','#6B0D20'],['нюд','#DCA894'],['молочный','#F3EEE7'],['чёрный','#14141A']];
+var cv=document.getElementById('c'),x=cv.getContext('2d'),pal=document.getElementById('pal'),msg=document.getElementById('msg'),root=document.documentElement;
+var color=SH[0][1],W,H,dpr,N={};
+pal.innerHTML=SH.map(function(s,i){return '<button type="button" aria-label="'+s[0]+'" aria-pressed="'+(i===0)+'" data-i="'+i+'" style="background:'+s[1]+'"></button>'}).join('');
+var paint=document.createElement('canvas'),px=paint.getContext('2d');
+var NAIL=new Path2D('M100 2C126 2 168 58 179 150L186 290Q187 318 160 318Q100 298 40 318Q13 318 14 290L21 150C32 58 74 2 100 2Z');
+var FR=new Path2D('M100 2C126 2 168 58 179 150L180 158Q100 116 20 158L21 150C32 58 74 2 100 2Z');
+var state={cure:0,curing:false,french:0,frenchOn:false,cov:0,auto:true,done:false},ghost=null;
+function size(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;
+  var mob=W<800,nh=mob?Math.min(H*.34,320):Math.min(H*.62,520);N.s=nh/322;N.w=200*N.s;N.h=322*N.s;N.x=(mob?W/2:W*.73)-N.w/2;N.y=(mob?H*.19:H*.5-N.h/2+10);
+  paint.width=Math.ceil(N.w*dpr);paint.height=Math.ceil(N.h*dpr);clearPaint()}
+function clearPaint(){px.setTransform(1,0,0,1,0,0);px.clearRect(0,0,paint.width,paint.height);state.cure=0;state.curing=false;state.french=0;state.frenchOn=false;state.cov=0;state.done=false;
+  document.getElementById('bLamp').classList.remove('pulse')}
+addEventListener('resize',size);size();
+function setColor(i){color=SH[i][1];pal.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.i==i)});root.style.setProperty('--c',i===4?'#B59A8E':color);clearPaint()}
+pal.addEventListener('click',function(e){var b=e.target.closest('button');if(b){stopAuto();setColor(+b.dataset.i);say('проведите пальцем по ногтю')}});
+function say(t){msg.style.opacity=0;setTimeout(function(){msg.textContent=t;msg.style.opacity=1},250)}
+// мазок кистью: в координатах ногтя (0..200, 0..322)
+var last=null;
+function stroke(a,b){px.save();px.setTransform(dpr*N.s,0,0,dpr*N.s,0,0);px.clip(NAIL);px.lineCap='round';px.lineJoin='round';
+  px.strokeStyle=color;px.globalAlpha=.9;px.lineWidth=54;px.beginPath();px.moveTo(a.x,a.y);px.lineTo(b.x,b.y);px.stroke();
+  px.globalAlpha=.18;px.strokeStyle='#fff';px.lineWidth=3;for(var k=-2;k<=2;k++){px.beginPath();px.moveTo(a.x+k*9,a.y);px.lineTo(b.x+k*9,b.y);px.stroke()}
+  px.globalAlpha=.25;px.strokeStyle='#000';px.lineWidth=2;for(k=-2;k<=2;k+=2){px.beginPath();px.moveTo(a.x+k*11+4,a.y);px.lineTo(b.x+k*11+4,b.y);px.stroke()}
+  px.restore()}
+function local(e){return{x:(e.clientX-N.x-fl.x)/N.s,y:(e.clientY-N.y-fl.y)/N.s}}
+cv.addEventListener('pointerdown',function(e){stopAuto();if(state.cure>=1){clearPaint()}last=local(e);stroke(last,last);cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',function(e){if(!last)return;var p=local(e);stroke(last,p);last=p});
+addEventListener('pointerup',function(){if(last){last=null;checkCov()}});
+function checkCov(){var d=px.getImageData(0,0,paint.width,paint.height).data,on=0,all=0;for(var i=3;i<d.length;i+=4*37){all++;if(d[i]>160)on++}
+  var nailArea=.84;state.cov=on/all/nailArea;if(state.cov>.8&&state.cure===0){document.getElementById('bLamp').classList.add('pulse');say('отлично! теперь — в лампу')}}
+function lamp(){if(state.cov<.3){say('сначала накрасьте ноготь');return}fillSolid();state.curing=true;state.cure=0;document.getElementById('bLamp').classList.remove('pulse');say('60 секунд в лампе…')}
+function fillSolid(){px.save();px.setTransform(dpr*N.s,0,0,dpr*N.s,0,0);px.fillStyle=color;px.globalAlpha=1;px.fill(NAIL);px.restore()}
+document.getElementById('bLamp').onclick=function(){stopAuto();lamp()};
+document.getElementById('bFr').onclick=function(){stopAuto();state.frenchOn=!state.frenchOn;if(state.frenchOn&&state.cov<.3){fillSolid();state.cov=1}};
+document.getElementById('bRe').onclick=function(){stopAuto();clearPaint();say('проведите пальцем по ногтю')};
+// автопоказ, пока посетительница не коснулась
+var autoT=null;
+function stopAuto(){state.auto=false;ghost=null;clearTimeout(autoT)}
+function runAuto(){if(!state.auto)return;clearPaint();var lanes=[46,100,154],seq=[];lanes.forEach(function(lx,i){seq.push({x:lx,y:300},{x:lx+(i-1)*6,y:20})});
+  ghost={seq:seq,i:0,t:0,p:{x:seq[0].x,y:seq[0].y}};}
+function stepGhost(){if(!ghost)return;var a=ghost.seq[ghost.i],b=ghost.seq[ghost.i+1];if(!b){ghost=null;state.cov=1;autoT=setTimeout(function(){if(state.auto)lamp()},500);return}
+  ghost.t+=ghost.i%2===0?.045:.2;var t=Math.min(1,ghost.t),e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;var p={x:a.x+(b.x-a.x)*e,y:a.y+(b.y-a.y)*e};
+  if(ghost.i%2===0)stroke(ghost.p,p);ghost.p=p;if(t>=1){ghost.i++;ghost.t=0}}
+setTimeout(runAuto,900);
+var fl={x:0,y:0},t0=performance.now(),rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function draw(now){var t=(now-t0)/1000;x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
+  fl.x=rm?0:Math.sin(t*.6)*4;fl.y=rm?0:Math.sin(t*.9)*7;var rot=rm?0:Math.sin(t*.5)*.03;
+  stepGhost();
+  if(state.curing){state.cure=Math.min(1,state.cure+.012);if(state.cure>=1){state.curing=false;state.done=true;say('готово ✨ глянец на 3 недели');
+    if(state.auto)autoT=setTimeout(function(){if(!state.auto)return;state.frenchOn=true;autoT=setTimeout(function(){if(state.auto){var i=(SH.findIndex(function(s){return s[1]===color})+1)%SH.length;setColor(i);runAuto()}},2600)},900)}}
+  if(state.frenchOn)state.french=Math.min(1,state.french+.03);else state.french=Math.max(0,state.french-.05);
+  x.save();x.translate(N.x+fl.x+N.w/2,N.y+fl.y+N.h/2);x.rotate(rot);x.translate(-N.w/2,-N.h/2);
+  // тень
+  x.save();x.scale(N.s,N.s);x.shadowColor='rgba(14,26,51,.25)';x.shadowBlur=36;x.shadowOffsetX=14;x.shadowOffsetY=26;x.fillStyle='#E8C3BE';x.fill(NAIL);x.restore();
+  // натуральный ноготь
+  x.save();x.scale(N.s,N.s);var g=x.createLinearGradient(0,0,200,0);g.addColorStop(0,'#E8C3BE');g.addColorStop(.5,'#F6DCD6');g.addColorStop(1,'#E2BAB4');x.fillStyle=g;x.fill(NAIL);
+  x.globalAlpha=.25;x.strokeStyle='#fff';for(var k=0;k<7;k++){x.beginPath();x.moveTo(30+k*24,30);x.lineTo(30+k*24,300);x.lineWidth=1;x.stroke()}x.globalAlpha=1;x.restore();
+  // краска
+  x.drawImage(paint,0,0,N.w,N.h);
+  // френч
+  if(state.french>0){x.save();x.scale(N.s,N.s);x.clip(NAIL);x.globalAlpha=state.french;x.fillStyle=color==='#F3EEE7'?'#fff':'#FBF8F4';
+    x.save();x.beginPath();x.rect(0,0,200,170*state.french+0);x.clip();x.fill(FR);x.restore();x.restore()}
+  // лампа: глянец там, где прошёл свет
+  var cy=state.done?1:state.cure;
+  x.save();x.scale(N.s,N.s);x.clip(NAIL);
+  // матовый вид до лампы — лёгкий
+  var hl=x.createLinearGradient(30,0,90,0);hl.addColorStop(0,'rgba(255,255,255,0)');hl.addColorStop(.5,'rgba(255,255,255,'+(.12+.6*cy)+')');hl.addColorStop(1,'rgba(255,255,255,0)');
+  x.save();x.beginPath();x.rect(0,0,200,322*cy+ (cy>0?0:322));x.clip();
+  x.fillStyle=hl;x.beginPath();x.ellipse(62,140,18,110,-.06,0,7);x.fill();
+  if(cy>0){x.globalAlpha=.55*cy;x.fillStyle='#fff';x.beginPath();x.ellipse(150,60,8,26,.35,0,7);x.fill();
+    var rim=x.createRadialGradient(100,170,60,100,170,170);rim.addColorStop(.7,'rgba(255,255,255,0)');rim.addColorStop(1,'rgba(255,255,255,'+.35*cy+')');x.globalAlpha=1;x.fillStyle=rim;x.fill(NAIL)}
+  x.restore();x.restore();
+  // кутикула
+  x.save();x.scale(N.s,N.s);x.strokeStyle='rgba(180,120,115,.45)';x.lineWidth=3;x.beginPath();x.moveTo(36,318);x.quadraticCurveTo(100,296,164,318);x.stroke();x.restore();
+  // лампа сверху
+  if(state.curing){var ly=-40+(N.h+80)*state.cure;x.save();x.translate(-N.w*.25,ly);
+    var lg=x.createRadialGradient(N.w*.75,0,4,N.w*.75,0,N.w*.9);lg.addColorStop(0,'rgba(190,150,255,.55)');lg.addColorStop(1,'rgba(190,150,255,0)');x.fillStyle=lg;x.fillRect(-N.w*.2,-N.w*.6,N.w*1.9,N.w*1.2);
+    x.fillStyle='#fff';x.shadowColor='rgba(170,120,255,.9)';x.shadowBlur=24;x.beginPath();x.roundRect?x.roundRect(0,-7,N.w*1.5,14,7):x.rect(0,-7,N.w*1.5,14);x.fill();
+    x.shadowBlur=0;for(k=0;k<9;k++){x.fillStyle=k%2?'#C9A8FF':'#fff';x.beginPath();x.arc(N.w*.12+k*N.w*.16,0,3.2,0,7);x.fill()}x.restore()}
+  x.restore();
+  // кисть-призрак
+  if(ghost){var gp=ghost.p,gx=N.x+fl.x+gp.x*N.s,gy=N.y+fl.y+gp.y*N.s;x.save();x.translate(gx,gy);x.rotate(-.35);
+    x.fillStyle=color;x.beginPath();x.ellipse(0,0,10,16,0,0,7);x.fill();x.fillStyle='#C9A26A';x.fillRect(-7,-46,14,32);x.fillStyle='#0E1A33';x.beginPath();x.roundRect?x.roundRect(-6,-140,12,96,6):x.rect(-6,-140,12,96);x.fill();x.restore()}
+  requestAnimationFrame(draw)}
+requestAnimationFrame(draw);
+})();
+</script>
+</body></html>
