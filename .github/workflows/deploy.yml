@@ -15,8 +15,8 @@ jobs:
     env:
       SITE: http://cp858271.tw1.ru
       DOMAIN: ma-nails.ru
-      FTP_HOST: vh480.timeweb.ru
-      FTP_USER: cp858271_deploy
+      FTP_HOST: ftp.example.ru  # заменить, когда купим хостинг
+      FTP_USER: deploy  # заменить, когда купим хостинг
       DIR: public_html
     steps:
       - name: Есть ли пароль FTP
