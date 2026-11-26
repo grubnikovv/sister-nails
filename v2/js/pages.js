@@ -18,7 +18,7 @@
   A.route('/', function () {
     return { html:
       '<section class="hero"><div class="wrap hero__g">' +
-        '<div><div class="hero__tag rv"><b>Новый поток</b>Онлайн-курсы стартуют сразу после оплаты</div>' +
+        '<div><div class="hero__tag rv"><b>Новый поток</b>Старт сразу после оплаты</div>' +
         '<h1 class="h1">' + ln('Профессия') + ln('<em>мастера</em>', 90) + ln('маникюра', 180) + '</h1>' +
         '<p class="lead rv" style="--d:250ms">A.S. Ногтевая академия и нейл студия Мэй’Эйлин Алины Грубниковой. Онлайн-школа с куратором и проверкой заданий — и студия, где делают маникюр, которым любуются.</p>' +
         '<div class="hero__acts rv" style="--d:320ms"><a class="btn" href="#/akademiya">Выбрать курс <span class="ar">→</span></a><a class="btn btn--ghost" href="#/studiya">Записаться на маникюр</a></div>' +
@@ -40,7 +40,7 @@
         '<div class="collage rv" style="height:min(100vw,520px)">' + ph('nails-black', 'p1') + ph('pedicure-blue', 'p2') + ph('nails-milk', 'p3') + '</div></div></section>',
       mount: function (v) {
         var col = v.querySelector('#col');
-        A.onScroll = function (y) { if (col && y < innerHeight * 1.3) col.style.transform = 'translate3d(0,' + y * .12 + 'px,0) rotate(' + (y * .006) + 'deg)'; };
+        A.onScroll = function (y) { if (col && innerWidth > 959 && y < innerHeight * 1.3) col.style.transform = 'translate3d(0,' + y * .12 + 'px,0) rotate(' + (y * .006) + 'deg)'; };
       } };
   });
 

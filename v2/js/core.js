@@ -134,13 +134,24 @@
       D.querySelectorAll('.nav a,.mnav a').forEach(function (a) { if (a.getAttribute('href') === '#' + m.base) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
       if (out.mount) out.mount(view);
       A.reveal(view); A.pick(view);
-      D.getElementById('mnav').classList.remove('on');
-      curPath = m;
+      D.getElementById('mnav').classList.remove('on'); D.body.classList.remove('menu');
+      A.typo(view); curPath = m;
     };
     if (first || A.rm || sameSection) { first = false; swap(); return; }
-    curtain.classList.remove('out'); curtain.classList.add('in');
-    setTimeout(function () { swap(); curtain.classList.remove('in'); curtain.classList.add('out'); setTimeout(function () { curtain.classList.remove('out'); }, 700); }, 560);
+    var toApp = (m.base === '/kabinet' || m.base === '/crm') && !(curPath && (curPath.base === '/kabinet' || curPath.base === '/crm'));
+    curtain.classList.toggle('quick', !toApp);
+    if (toApp) { D.getElementById('brandS').textContent = m.base === '/crm' ? 'кабинет куратора' : 'личный кабинет'; }
+    curtain.classList.remove('out'); void curtain.offsetWidth; curtain.classList.add('in');
+    setTimeout(function () { swap(); curtain.classList.remove('in'); curtain.classList.add('out'); setTimeout(function () { curtain.classList.remove('out'); }, 700); }, toApp ? 1900 : 620);
   }
+  var SHORT = /(^|[\s(«"„])([А-Яа-яЁёA-Za-z]{1,2}|без|для|под|над|при|про|что|как|или|все|это|вам|вас|нас|мне|так|уже|его|она|они|наш|мой|ваш|где|кто|чем|вы|не|ни)\s+(?=\S)/g;
+  A.typo = function (root) {
+    var w = D.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: function (n) { var p = n.parentNode && n.parentNode.nodeName; return p === 'SCRIPT' || p === 'STYLE' || p === 'TEXTAREA' ? 2 : 1; } }), n;
+    while ((n = w.nextNode())) { var t = n.nodeValue, o = t;
+      t = t.replace(SHORT, function (m, a, b) { return a + b + '\u00a0'; }).replace(SHORT, function (m, a, b) { return a + b + '\u00a0'; });
+      t = t.replace(/ (—|–) /g, '\u00a0$1 ').replace(/(\d) (?=\d{3}\b)/g, '$1\u00a0').replace(/(\d) (?=(₽|мин|ч\b|дн|дня|дней|мес|урок|тем|лет|год|курс|выпуск|%))/g, '$1\u00a0');
+      if (t !== o) n.nodeValue = t; }
+  };
   A.rerender = function () { first = true; render(); };
   A.reveal = function (root) {
     if (A.rm || !('IntersectionObserver' in window)) { root.querySelectorAll('.rv,.ln,.wipe').forEach(function (e) { e.classList.add('in'); }); return; }
@@ -151,9 +162,9 @@
   };
   A.start = function () {
     view = D.getElementById('view'); curtain = D.getElementById('curtain');
-    addEventListener('hashchange', render); render();
+    A.typo(D.getElementById('foot')); A.typo(D.getElementById('mnav')); addEventListener('hashchange', render); render();
     var hdr = D.getElementById('hdr'), last = 0, tick = false;
     addEventListener('scroll', function () { if (tick) return; tick = true; requestAnimationFrame(function () { tick = false; var y = scrollY; hdr.classList.toggle('solid', y > 30); hdr.classList.toggle('hide', y > last && y > 400); last = y; if (A.onScroll) A.onScroll(y); }); }, { passive: true });
-    D.getElementById('burger').onclick = function () { D.getElementById('mnav').classList.toggle('on'); };
+    D.getElementById('burger').onclick = function () { var on = D.getElementById('mnav').classList.toggle('on'); D.body.classList.toggle('menu', on); };
   };
 })();
