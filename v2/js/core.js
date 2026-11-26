@@ -37,8 +37,23 @@
       x.tc = x.tc || [['00:00', 'Вступление'], ['03:00', 'Теория'], ['08:00', 'Практика']];
       out.push(x);
     }); });
+    // тип урока: теория / тест / практика (задание с проверкой). Алина меняет тип в CRM → «Курсы»
+    var ov = (A.S && A.S.ltype && A.S.ltype[c.id]) || {};
+    out.forEach(function (x, i) {
+      x.k = ov[i] || x.k || (x.hw ? 'practice' : x.quiz ? 'test' : 'theory');
+      if (x.k === 'practice' && !x.hw) x.hw = { t: 'Выполните практику по теме урока и пришлите фото работы.', c: ['Фото до и после', 'Фото крупным планом при дневном свете'] };
+      if (x.k === 'test' && !x.quiz) {
+        var o1 = out[(i + 3) % out.length], o2 = out[(i + 7) % out.length];
+        x.quiz = [
+          { q: 'Какой теме посвящён этот урок?', a: [x.t, o1.t, o2.t], ok: 0 },
+          { q: 'Что из этого разбирается в уроке?', a: [o1.pts[0], x.pts[0], o2.pts[1] || o2.pts[0]], ok: 1 },
+          { q: 'Что делать, если что-то осталось непонятным?', a: ['Пропустить и идти дальше', 'Пересмотреть фрагмент по таймкодам и написать куратору', 'Начать курс заново'], ok: 1 }
+        ];
+      }
+    });
     return out;
   };
+  A.KIND = { theory: ['Теория', 'tag'], test: ['Тест', 'tag test'], practice: ['Задание', 'tag pink'] };
 
   /* ---------- демо-база (только в этом браузере) ---------- */
   var KEY = 'as-v2';
@@ -81,14 +96,6 @@
         { f: 's', t: 'Сделала первый френч на подруге, посмотрите, пожалуйста', p: [A.img('nails-black', 960), A.img('nails-nude', 960)], at: n - 20 * 36e5 },
         { f: 'c', t: 'Линия улыбки ровная, умница! На безымянном чуть толще — попробуйте кисть тоньше. Вот пример', p: [A.img('nails-milk', 960)], at: n - 18 * 36e5 }
       ],
-      bookings: [
-        { id: 'b1', name: 'Ольга', svc: 'Маникюр с гель-лаком', day: T, time: '11:00', price: 3000 },
-        { id: 'b2', name: 'Екатерина', svc: 'Полный педикюр', day: T, time: '15:00', price: 4200 },
-        { id: 'b3', name: 'Дарья', svc: 'Наращивание', day: T + DAY, time: '10:00', price: 4500 },
-        { id: 'b4', name: 'Светлана', svc: 'Маникюр без покрытия', day: T + DAY, time: '14:00', price: 1800 },
-        { id: 'b5', name: 'Ирина', svc: 'Коррекция', day: T + 2 * DAY, time: '12:00', price: 4000 }
-      ],
-      certs: [{ n: 'ME-2471', sum: 3000, left: 1500, who: 'Анна', till: T + 60 * DAY }],
       pay: [
         { t: n - 40 * DAY, sum: 61000 }, { t: n - 30 * DAY, sum: 84000 }, { t: n - 20 * DAY, sum: 72000 }, { t: n - 10 * DAY, sum: 108000 }, { t: n - 2 * DAY, sum: 91000 }
       ],
@@ -97,6 +104,11 @@
   };
   A.load = function () { var s; try { s = JSON.parse(localStorage.getItem(KEY)); } catch (e) {} A.S = s && s.leads ? s : A.seed();
     if (!A.S.v2p) { A.S.v2p = 1; var sd = A.seed(); sd.chat.forEach(function (m) { if (m.p && !A.S.chat.some(function (x) { return x.t === m.t; })) A.S.chat.push(m); }); A.S.chat.sort(function (a, b) { return a.at - b.at; }); } };
+  /* онлайн-запись в студию — через DIKIDI (ссылку Алины подставим, когда пришлёт) */
+  A.DIKIDI = 'https://dikidi.net/';
+  A.book = function () { var w = window.open(A.DIKIDI, '_blank'); if (w) { try { w.opener = null; } catch (e) {} } else location.href = A.DIKIDI; };
+  /* согласие (152-ФЗ): отдельная галочка, ссылки открывают документы в новой вкладке */
+  A.consent = function (id, offer) { return '<label class="cns"><input type="checkbox" id="' + id + '" required><span>' + (offer ? 'Принимаю условия <a href="#/dokumenty/oferta" target="_blank">публичной оферты</a> и ' : 'Даю ') + (offer ? 'даю ' : '') + '<a href="#/dokumenty/soglasie" target="_blank">согласие на обработку персональных данных</a> в соответствии с <a href="#/dokumenty/politika" target="_blank">политикой конфиденциальности</a></span></label>'; };
   A.compress = function (file, max, cb) { var r = new FileReader(); r.onload = function () { var im = new Image(); im.onload = function () { var k = Math.min(1, max / Math.max(im.width, im.height)), cv = D.createElement('canvas'); cv.width = Math.round(im.width * k); cv.height = Math.round(im.height * k); cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height); cb(cv.toDataURL('image/jpeg', .78)); }; im.src = r.result; }; r.readAsDataURL(file); };
   A.save = function () { try { localStorage.setItem(KEY, JSON.stringify(A.S)); } catch (e) { A.toast('Не хватило места — фото не сохранилось'); } };
   A.reset = function () { A.S = A.seed(); A.save(); };
@@ -130,6 +142,7 @@
     out: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10"/></svg>',
     menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h16M4 16h16"/></svg>',
     cam: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+    doc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/></svg>',
     lock: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
   };
 
@@ -183,7 +196,7 @@
     var cnt = new IntersectionObserver(function (es) { es.forEach(function (e) { if (!e.isIntersecting) return; var b = e.target, n = +b.dataset.n, t0 = performance.now(); (function st(t) { var k = Math.min(1, (t - t0) / 1500); b.textContent = Math.round(n * (1 - Math.pow(1 - k, 3))) + (k === 1 ? (b.dataset.s || '') : ''); if (k < 1) requestAnimationFrame(st); })(t0); cnt.unobserve(b); }); }, { threshold: .5 });
     root.querySelectorAll('[data-n]').forEach(function (b) { cnt.observe(b); });
   };
-  A.LOGO = '<span class="lgo"><span class="lgo__mk"><i class="msk lgo__e"></i><img src="../img/me-m.webp" alt="" width="814" height="544"></span><span class="lgo__w"><i class="msk lgo__n"></i><i class="msk lgo__s"></i></span></span>';
+  A.LOGO = '<span class="lgo"><span class="lgo__mk"><i class="msk lgo__e"></i><img src="../img/me-m.webp" alt="" width="814" height="544"></span><span class="lgo__w"><i class="msk lgo__n"></i><svg class="lgo__s" viewBox="0 0 1000 66" aria-hidden="true"><text x="500" y="52" text-anchor="middle" textLength="996" lengthAdjust="spacing" font-family="Onest,system-ui,sans-serif" font-weight="500" font-size="62" fill="currentColor">АКАДЕМИЯ &amp; НЕЙЛ СТУДИЯ</text></svg></span></span>';
   A.setTheme = function (t) {
     var R = D.documentElement; R.classList.add('theme-anim'); R.dataset.theme = t;
     try { localStorage.setItem('as-theme', t); } catch (e) {}
@@ -214,6 +227,7 @@
   A.toggleTheme = function () { A.setTheme(D.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); };
   A.start = function () {
     var th = D.getElementById('thm'); if (th) th.onclick = A.toggleTheme;
+    try { if (!localStorage.getItem('as-ck')) { var ck = D.getElementById('ck'); ck.hidden = false; requestAnimationFrame(function () { ck.classList.add('on'); }); D.getElementById('ckok').onclick = function () { localStorage.setItem('as-ck', '1'); ck.classList.remove('on'); setTimeout(function () { ck.hidden = true; }, 500); }; } } catch (e) {}
     D.addEventListener('click', function (e) { if (e.target.closest('[data-theme-toggle]')) A.toggleTheme(); });
     if (D.documentElement.dataset.theme === 'dark') { var mt = D.querySelector('meta[name=theme-color]'); if (mt) mt.content = '#1E1D1F'; }
     view = D.getElementById('view'); curtain = D.getElementById('curtain');

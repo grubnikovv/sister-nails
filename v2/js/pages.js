@@ -23,7 +23,7 @@
         '<p class="lead rv" style="--d:250ms">A.S. Ногтевая академия и нейл студия Мэй’Эйлин Алины Грубниковой. Онлайн-школа с куратором и проверкой заданий — и студия, где делают маникюр, которым любуются.</p>' +
         '<div class="hero__acts rv" style="--d:320ms"><a class="btn" href="#/akademiya">Выбрать курс <span class="ar">→</span></a><a class="btn btn--ghost" href="#/studiya">Записаться на маникюр</a></div>' +
         '<ul class="stats4 rv" style="--d:400ms"><li><b data-n="50" data-s="+">0</b><span>выпускниц</span></li><li><b data-n="10">0</b><span>курсов</span></li><li><b data-n="5" data-s="+">0</b><span>лет практики</span></li><li><b>1:1</b><span>личный куратор</span></li></ul></div>' +
-        '<div class="collage rv" id="col" style="--d:200ms"><i class="tape"></i>' + ph('nails-wine', 'p1', 'Маникюр Алины') + ph('alina', 'p2', 'Алина Грубникова') + ph('nails-nude', 'p3', 'Френч') + '</div>' +
+        '<div class="collage rv" id="col" style="--d:200ms">' + ph('nails-wine', 'p1', 'Маникюр Алины') + ph('alina', 'p2', 'Алина Грубникова') + ph('nails-nude', 'p3', 'Френч') + '</div>' +
       '</div></section>' +
       '<div class="tline" aria-hidden="true"><span>Маникюр<i>✦</i>Педикюр<i>✦</i>Онлайн-школа<i>✦</i>Куратор<i>✦</i>Сертификат<i>✦</i>Маникюр<i>✦</i>Педикюр<i>✦</i>Онлайн-школа<i>✦</i>Куратор<i>✦</i>Сертификат<i>✦</i></span></div>' +
       '<section class="sec"><div class="wrap"><span class="cap rv">Почему академия Алины</span><h2 class="h2" style="margin:16px 0 50px">' + ln('Обучение,') + ln('<em>которое работает</em>', 90) + '</h2>' +
@@ -94,13 +94,10 @@
     A.onScroll = null;
     return { html:
       '<section class="khero"><div class="wrap khero__g"><div><span class="cap rv">Нейл студия Мэй’Эйлин · Москва</span><h1 class="h1" style="margin:16px 0 24px">' + ln('Студия') + ln('<em>Мэй’Эйлин</em>', 90) + '</h1><p class="lead rv">Стерильные инструменты, материалы премиум-класса и покрытие, которое носится без сколов три недели.</p>' +
-        '<div class="hero__acts rv" style="margin-top:30px"><button class="btn" data-book>Записаться онлайн <span class="ar">→</span></button><button class="btn btn--ghost" data-gift>Подарочный сертификат</button></div></div>' +
-        '<div class="collage rv" style="height:min(110vw,560px)"><i class="tape"></i>' + ph('nails-black', 'p1') + ph('nails-wine', 'p2') + ph('nails-nude', 'p3') + '</div></div></section>' +
+        '<div class="hero__acts rv" style="margin-top:30px"><button class="btn" data-book>Записаться онлайн <span class="ar">→</span></button></div></div>' +
+        '<div class="collage rv" style="height:min(110vw,560px)">' + ph('nails-black', 'p1') + ph('nails-wine', 'p2') + ph('nails-nude', 'p3') + '</div></div></section>' +
       '<section class="sec powder" style="padding-top:80px"><div class="wrap"><span class="cap rv">Услуги и цены</span><h2 class="h2" style="margin:16px 0 36px">' + ln('Выберите') + ln('<em>свой оттенок</em>', 90) + '</h2>' +
         '<div class="svc">' + SVC.map(function (s, i) { return '<button class="rv" style="--d:' + i * 50 + 'ms" data-book="' + i + '"><i class="nl" style="--c:' + s[3] + '"></i><span><b>' + E(s[0]) + '</b><small>' + E(s[1]) + '</small></span><em>' + (i === 7 ? '+' : (i === 3 ? 'от ' : '')) + A.rub(s[2]) + '</em></button>'; }).join('') + '</div></div></section>' +
-      '<section class="sec wine"><div class="wrap" style="display:grid;gap:40px;align-items:center;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))"><div><span class="cap rv">Подарок</span><h2 class="h2" style="margin:16px 0 22px">' + ln('Подарочный') + ln('<em>сертификат</em>', 90) + '</h2><p class="lead rv" style="color:rgba(248,237,242,.75)">На любую процедуру. Действует 3 месяца, приходит красивой открыткой сразу после оплаты.</p>' +
-        '<div class="hero__acts rv" style="margin-top:28px"><button class="btn btn--pink" data-gift>Подарить <span class="ar">→</span></button></div></div>' +
-        '<div class="rv" style="aspect-ratio:1.6;border-radius:26px;background:linear-gradient(135deg,#FBE6F3,#F0E9DF);color:#0E1A33;padding:28px;display:flex;flex-direction:column;justify-content:space-between;transform:rotate(-4deg);box-shadow:0 50px 90px -40px rgba(0,0,0,.6)"><span class="lgo" style="font-size:40px;color:#0E1A33">' + A.LOGO.replace('<span class="lgo">', '') + '<div><div style="font:500 clamp(44px,6vw,72px)/1 var(--serif)">3 000 ₽</div><div class="cap">Подарочный сертификат</div></div></div></div></section>' +
       '<section class="sec" style="padding-bottom:60px"><div class="wrap" style="margin-bottom:40px"><span class="cap rv">Портфолио</span><h2 class="h2" style="margin-top:16px">' + ln('Работы') + ln('<em>студии</em>', 90) + '</h2></div>' + marq() + '</section>' };
   });
 
@@ -127,7 +124,7 @@
       '<div class="fld"><label for="lp">Телефон</label><input class="inp" id="lp" type="tel" required placeholder="+7"></div>' +
       '<div class="fld"><label for="lc">Интересует</label><select class="inp" id="lc">' + COURSES.map(function (c) { return '<option value="' + c.id + '">' + E(c.t) + ' · ' + (c.f === 'online' ? 'онлайн' : 'офлайн') + '</option>'; }).join('') + '</select></div>' +
       '<div class="fld"><label for="lm">Комментарий</label><textarea class="inp" id="lm" placeholder="Есть ли опыт, удобное время для звонка"></textarea></div>' +
-      '<button class="btn" style="width:100%">Отправить заявку</button><p class="muted" style="margin-top:10px;font-size:12px">Нажимая, вы соглашаетесь на обработку персональных данных</p></form></div></section>',
+      A.consent('lcn') + '<button class="btn" style="width:100%;margin-top:12px">Отправить заявку</button></form></div></section>',
       mount: function (v) {
         v.querySelector('#lf').onsubmit = function (e) {
           e.preventDefault(); var c = A.course(v.querySelector('#lc').value);
@@ -137,45 +134,50 @@
       } };
   });
 
+  /* ---------- документы ---------- */
+  function docLinks(d) { return '<a class="btn btn--sm" href="docs/' + d.id + '.pdf" download="' + E(d.t) + ' — Мэй’Эйлин.pdf">' + A.I.dl + 'Скачать PDF</a>'; }
+  A.route('/dokumenty', function (arg) {
+    A.onScroll = null;
+    var d = (window.DOCS || []).filter(function (x) { return x.id === arg[0]; })[0];
+    if (!d) return '<section class="dhero"><div class="wrap"><span class="cap rv">Правовая информация</span><h1 class="h2" style="margin:16px 0 18px">' + ln('Документы') + '</h1><p class="lead rv">Публичная оферта, политика конфиденциальности и другие документы ИП Грубниковой А. С. Читайте на сайте или скачивайте в PDF.</p></div></section>' +
+      '<section class="sec" style="padding-top:20px"><div class="wrap"><div class="dgrid">' + DOCS.map(function (x, i) { return '<article class="dcard rv" style="--d:' + i * 60 + 'ms"><span class="dcard__ic">' + A.I.doc + '</span><h2>' + E(x.t) + '</h2><p>' + E(x.d) + '</p><small>Редакция от ' + x.date + '</small><div class="dcard__a"><a class="btn btn--sm btn--ghost" href="#/dokumenty/' + x.id + '">Читать</a>' + docLinks(x) + '</div></article>'; }).join('') + '</div></div></section>';
+    var toc = d.s.filter(function (x) { return x.h; });
+    return { html: '<section class="dhero"><div class="wrap"><a class="lnk" href="#/dokumenty">← Все документы</a><h1 class="h2 dtitle">' + E(d.t) + '</h1><div class="dmeta"><span class="muted">Редакция от ' + d.date + ' · ИП Грубникова Алина Сергеевна</span><div class="dmeta__a">' + docLinks(d) + '<button class="btn btn--sm btn--ghost" onclick="print()">Распечатать</button></div></div></div></section>' +
+      '<section class="sec" style="padding-top:10px"><div class="wrap dlay">' + (toc.length > 2 ? '<nav class="dtoc" aria-label="Содержание"><b>Содержание</b>' + toc.map(function (x) { var k = d.s.indexOf(x); return '<a href="#/dokumenty/' + d.id + '" data-sec="s' + k + '">' + E(x.h) + '</a>'; }).join('') + '</nav>' : '<div></div>') +
+      '<article class="doc">' + d.s.map(function (x, k) { return '<section id="s' + k + '">' + (x.h ? '<h2>' + E(x.h) + '</h2>' : '') + x.html + '</section>'; }).join('') +
+      (d.req ? '<section class="doc__req"><h2>Реквизиты исполнителя</h2>' + DOCS.filter(function (x) { return x.id === 'rekvizity'; })[0].s[0].html + '</section>' : '') + '</article></div></section>',
+      mount: function (v) { v.querySelectorAll('[data-sec]').forEach(function (a) { a.onclick = function (e) { e.preventDefault(); var t = v.querySelector('#' + a.dataset.sec); scrollTo({ top: t.getBoundingClientRect().top + scrollY - 90, behavior: A.rm ? 'auto' : 'smooth' }); }; }); } };
+  });
+
   /* ---------- вход ---------- */
   A.route('/vhod', function () {
     A.onScroll = null;
     return '<section class="login"><div style="width:100%;max-width:900px"><h1 class="h2" style="text-align:center;margin-bottom:34px">' + ln('Вход') + ln('<em>в кабинет</em>', 90) + '</h1><div class="login__g">' +
-      '<a class="lcard rv" href="#/kabinet"><span class="cap">Для учениц и клиенток</span><h2>Личный <em>кабинет</em></h2><p>Уроки, домашние задания, куратор, сертификаты и записи в студию.</p><span class="btn">Войти по телефону <span class="ar">→</span></span></a>' +
-      '<a class="lcard d rv" style="--d:100ms" href="#/crm"><span class="cap" style="color:rgba(244,238,242,.6)">Для Алины</span><h2>CRM <em>куратора</em></h2><p>Заявки, ученицы, проверка заданий, записи, аналитика и выгрузка в таблицы.</p><span class="btn btn--pink">Войти <span class="ar">→</span></span></a>' +
-      '</div><p class="demo-note">Демо-режим: вход без пароля, данные хранятся только в этом браузере. <button class="lnk" onclick="A.reset();A.toast(\'Демо сброшено\')">Сбросить демо</button></p></div></section>';
+      '<div class="lcard rv"><span class="cap">Для учениц</span><h2>Личный <em>кабинет</em></h2><p>Уроки, домашние задания, связь с куратором и прогресс обучения.</p>' +
+        '<div class="sso"><a class="sso__b vk" href="#/kabinet"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="7" fill="#0077FF"/><path d="M12.8 17c-5 0-7.8-3.4-7.9-9.1h2.5c.1 4.2 1.9 5.9 3.4 6.3V7.9h2.3v3.6c1.4-.2 2.9-1.8 3.4-3.6h2.3c-.4 2.2-2 3.8-3.2 4.5 1.2.6 3 2 3.7 4.6h-2.5c-.5-1.7-1.9-3-3.7-3.2V17h-.3z" fill="#fff"/></svg>Войти через VK ID</a>' +
+        '<a class="sso__b ya" href="#/kabinet"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#FC3F1D"/><path d="M13.3 6.5h-1.1c-2 0-3.1 1-3.1 2.6 0 1.8.8 2.6 2.4 3.7l1.3.9-3.8 5.8H6.7l3.4-5.1C8.2 13 7 11.7 7 9.2c0-3 2.1-5 5.2-5h3v14.8h-1.9V6.5z" fill="#fff"/></svg>Войти через Яндекс ID</a>' +
+        '<div class="sso__or"><span>или по почте</span></div><form class="sso__f" onsubmit="event.preventDefault();var v=this.querySelector(\'input\').value;if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(v)){A.toast(\'Введите почту, указанную при покупке\');return}A.toast(\'Ссылка для входа отправлена на \'+v+\' (демо)\');setTimeout(function(){location.hash=\'#/kabinet\'},900)"><input class="inp" type="email" inputmode="email" autocomplete="email" placeholder="Почта, указанная при покупке"><button class="btn">Получить ссылку для входа <span class="ar">→</span></button></form></div>' +
+        '<p class="muted" style="margin-top:14px;font-size:12.5px">Доступ к курсу приходит на почту после оплаты. VK ID или Яндекс ID можно привязать в кабинете для быстрого входа.</p></div>' +
+      '<a class="lcard d rv" style="--d:100ms" href="#/crm"><span class="cap" style="color:rgba(244,238,242,.6)">Для Алины</span><h2>CRM <em>куратора</em></h2><p>Заявки, ученицы, проверка заданий, сообщения, аналитика и выгрузка в таблицы.</p><span class="btn btn--pink">Войти <span class="ar">→</span></span></a>' +
+      '</div><p class="demo-note">Демо-режим: вход без проверки, данные хранятся только в этом браузере. <button class="lnk" onclick="A.reset();A.toast(\'Демо сброшено\')">Сбросить демо</button></p></div></section>';
   });
 
-  /* ---------- запись, сертификат, покупка ---------- */
+  /* ---------- запись (DIKIDI) и покупка курса ---------- */
   D.addEventListener('click', function (e) {
     var b = e.target.closest('[data-book]');
-    if (b) { e.preventDefault(); var pre = +b.dataset.book || 1; var days = '', d0 = A.today();
-      for (var i = 0; i < 12; i++) { var x = new Date(d0 + i * A.DAY); days += '<button aria-pressed="' + (i === 0) + '"><small>' + (i ? A.WD[x.getDay()] : 'сег') + '</small><b>' + x.getDate() + '</b></button>'; }
-      A.sheet('<h3>Запись к Алине</h3><p class="muted" style="margin-bottom:16px">Подтверждение придёт из DIKIDI · напомним накануне</p><div class="opts" data-pick>' + A.SVC.slice(0, 7).map(function (s, i) { return '<button aria-pressed="' + (i === pre) + '" data-i="' + i + '"><span><b>' + E(s[0]) + '</b><small>' + E(s[1]) + '</small></span><span>' + A.rub(s[2]) + '</span></button>'; }).join('') + '</div>' +
-        '<div class="dys" data-pick>' + days + '</div><div class="tms" data-pick>' + ['10:00', '11:30', '13:00', '14:30', '16:00', '17:30', '18:00', '19:30'].map(function (t, i) { return '<button ' + (i === 1 || i === 4 ? 'disabled ' : '') + 'aria-pressed="' + (i === 6) + '">' + t + '</button>'; }).join('') + '</div>' +
-        '<div class="fld" style="margin-top:16px"><input class="inp" id="bn" placeholder="Ваше имя"></div><div class="fld"><input class="inp" id="bp" type="tel" placeholder="Телефон"></div>' +
-        '<button class="btn" style="width:100%" id="bok">Подтвердить запись</button>', function (p) {
-          A.pick(p);
-          p.querySelector('#bok').onclick = function () {
-            var s = A.SVC[+p.querySelector('.opts [aria-pressed=true]').dataset.i], di = [].indexOf.call(p.querySelectorAll('.dys button'), p.querySelector('.dys [aria-pressed=true]'));
-            A.S.bookings.push({ id: 'b' + Date.now(), name: p.querySelector('#bn').value || 'Клиентка с сайта', svc: s[0], day: A.today() + di * A.DAY, time: p.querySelector('.tms [aria-pressed=true]').textContent, price: s[2], site: 1 });
-            A.save(); A.closeSheet(); A.toast('Вы записаны! Запись видна в CRM Алины');
-          };
-        });
-      return; }
-    var g = e.target.closest('[data-gift]');
-    if (g) { A.sheet('<h3>Подарочный сертификат</h3><p class="muted" style="margin-bottom:16px">Действует 3 месяца на любую процедуру</p><div class="opts" data-pick>' + [2000, 3000, 5000].map(function (v, i) { return '<button aria-pressed="' + (i === 1) + '" data-v="' + v + '"><b>' + A.rub(v) + '</b><span>✦</span></button>'; }).join('') + '</div><div class="fld" style="margin-top:16px"><input class="inp" id="gw" placeholder="Кому — напишем на сертификате"></div><button class="btn" style="width:100%" id="gok">Оплатить</button>', function (p) {
-        A.pick(p); p.querySelector('#gok').onclick = function () { var v = +p.querySelector('[aria-pressed=true]').dataset.v; A.S.certs.push({ n: 'ME-' + String(Date.now()).slice(-4), sum: v, left: v, who: p.querySelector('#gw').value || 'Подарок', till: A.today() + 91 * A.DAY }); A.S.pay.push({ t: Date.now(), sum: v }); A.save(); A.closeSheet(); A.toast('Оплачено (демо) — сертификат отправлен на почту'); };
-      }); return; }
+    if (b) { e.preventDefault(); A.book(); return; }
     var buy = e.target.closest('[data-buy]');
     if (buy) { var c = A.course(buy.dataset.buy);
       A.sheet('<h3>' + E(c.t) + '</h3><p class="muted" style="margin-bottom:18px">' + (c.f === 'online' ? 'Онлайн-курс · доступ откроется сразу после оплаты' : 'Офлайн · предоплата бронирует даты') + '</p>' +
-        '<div class="fld"><input class="inp" id="pn" placeholder="Имя и фамилия"></div><div class="fld"><input class="inp" id="pp" type="tel" placeholder="Телефон"></div><div class="fld"><input class="inp" id="pe" type="email" placeholder="Почта — для чека и доступа"></div>' +
+        '<div class="fld"><input class="inp" id="pn" autocomplete="name" placeholder="Имя и фамилия"></div><div class="fld"><input class="inp" id="pe" type="email" autocomplete="email" inputmode="email" placeholder="Почта — на неё придёт доступ и чек"></div>' +
         '<div class="opts" data-pick><button aria-pressed="true"><b>Картой</b><span>💳</span></button><button aria-pressed="false"><b>СБП</b><span>⚡</span></button></div>' +
-        '<button class="btn" style="width:100%;margin-top:16px" id="pok">Оплатить ' + A.rub(c.f === 'online' ? c.p : Math.round(c.p / 3)) + '</button><p class="muted" style="text-align:center;margin-top:10px;font-size:12px">Демо: настоящая оплата заработает после подключения банка</p>', function (p) {
+        A.consent('pc', true) + '<button class="btn" style="width:100%;margin-top:12px" id="pok">Оплатить ' + A.rub(c.f === 'online' ? c.p : Math.round(c.p / 3)) + '</button><p class="muted" style="text-align:center;margin-top:10px;font-size:12px">Демо: настоящая оплата заработает после подключения банка</p>', function (p) {
           A.pick(p); p.querySelector('#pok').onclick = function () {
+            var em = p.querySelector('#pe').value.trim();
+            if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) { A.toast('Укажите почту — на неё придёт доступ к курсу'); p.querySelector('#pe').focus(); return; }
+            if (!p.querySelector('#pc').checked) { A.toast('Нужно согласие с офертой и на обработку данных'); return; }
             var name = p.querySelector('#pn').value || 'Новая ученица', sum = c.f === 'online' ? c.p : Math.round(c.p / 3);
-            A.S.leads.unshift({ id: 'l' + Date.now(), name: name, phone: p.querySelector('#pp').value, email: p.querySelector('#pe').value, stage: c.f === 'online' ? 'study' : 'pay', course: c.id, src: 'Сайт', sum: c.p, note: c.f === 'online' ? 'Оплатила онлайн' : 'Внесла предоплату', at: Date.now(), hist: [{ t: Date.now(), x: 'Покупка на сайте: ' + A.rub(sum) }] });
+            A.S.leads.unshift({ id: 'l' + Date.now(), name: name, phone: '', email: em, stage: c.f === 'online' ? 'study' : 'pay', course: c.id, src: 'Сайт', sum: c.p, note: c.f === 'online' ? 'Оплатила онлайн' : 'Внесла предоплату', at: Date.now(), hist: [{ t: Date.now(), x: 'Покупка на сайте: ' + A.rub(sum) }] });
             A.S.pay.push({ t: Date.now(), sum: sum }); A.save(); A.closeSheet(); A.toast(c.f === 'online' ? 'Оплачено (демо) — доступ в личном кабинете' : 'Предоплата получена (демо) — Алина свяжется');
           };
         }); }

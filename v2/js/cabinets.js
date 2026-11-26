@@ -7,10 +7,10 @@
     var side = '<aside class="side"><a class="logo" href="#/" style="padding:0;background:none" aria-label="На сайт">' + A.LOGO + '</a>' +
       tabs.map(function (t) { return '<a href="#/' + kind + (t[0] ? '/' + t[0] : '') + '"' + (t[0] === cur ? ' aria-current="page"' : '') + '>' + I[t[2]] + t[1] + (t[3] ? '<span class="cnt">' + t[3] + '</span>' : '') + '</a>'; }).join('') +
       '<button class="sthm thm" data-theme-toggle>' + TH + '<span class="t-l">Тёмная тема</span><span class="t-d">Светлая тема</span></button>' +
-      '<a href="#/">' + I.out + 'На сайт</a>' +
+      '<a href="#/" class="sout">' + I.out + 'Выйти</a>' +
       '<div class="who"><span class="av">' + (kind === 'crm' ? 'АГ' : 'АС') + '</span><span>' + (kind === 'crm' ? 'Алина Грубникова<br><small style="opacity:.6">куратор</small>' : E(S().me.name) + '<br><small style="opacity:.6">ученица</small>') + '</span></div></aside>';
     var bar = '<nav class="tabbar">' + tabs.slice(0, 5).map(function (t) { return '<a href="#/' + kind + (t[0] ? '/' + t[0] : '') + '"' + (t[0] === cur ? ' aria-current="page"' : '') + '>' + I[t[2]] + '<span>' + t[1].split(' ')[0] + '</span>' + (t[3] ? '<span class="cnt">' + t[3] + '</span>' : '') + '</a>'; }).join('') + '</nav>';
-    return '<div class="shell">' + side + '<main class="main"><button class="ib thm thm-fab" data-theme-toggle aria-label="Сменить тему">' + TH + '</button>' + body + '</main></div>' + bar;
+    return '<div class="shell">' + side + '<main class="main"><div class="abar"><a class="logo" href="#/" aria-label="На главную">' + A.LOGO + '</a><div class="abar__r"><button class="ib thm" data-theme-toggle aria-label="Сменить тему">' + TH + '</button><a class="ib" href="#/" aria-label="Выйти" title="Выйти">' + I.out + '</a></div></div>' + body + '</main></div>' + bar;
   }
   function top(title, sub, right) { return '<div class="atop"><div><h1>' + title + '</h1>' + (sub ? '<p>' + sub + '</p>' : '') + '</div>' + (right || '') + '</div>'; }
   function photos(a) { return a && a.length ? '<div class="photos">' + a.map(function (s) { return '<img src="' + s + '" alt="Фото работы">'; }).join('') + '</div>' : ''; }
@@ -18,26 +18,29 @@
   /* ============ КАБИНЕТ УЧЕНИЦЫ ============ */
   function myCourse() { return A.course(S().me.course); }
   function les() { return A.lessons(myCourse()); }
-  function done(i) { var p = S().prog[i], l = les()[i]; if (!p) return false; return l.hw ? p.st === 'ok' : (p.st === 'done' || p.st === 'ok'); }
+  function done(i) { var p = S().prog[i], l = les()[i]; if (!p) return false; return l.k === 'practice' ? p.st === 'ok' : l.k === 'test' ? p.st === 'passed' : (p.st === 'done' || p.st === 'ok' || p.st === 'passed'); }
+  function kind(l) { var k = A.KIND[l.k]; return '<span class="' + k[1] + ' kd">' + k[0] + '</span>'; }
   function open(i) { return i === 0 || done(i - 1); }
   function cur() { var L = les(); for (var i = 0; i < L.length; i++) if (!done(i)) return i; return L.length - 1; }
   function dcount() { var c = 0; les().forEach(function (_, i) { if (done(i)) c++; }); return c; }
   function unreadS() { return S().chat.filter(function (m) { return m.f === 'c' && m.at > (S().seen.s || 0); }).length; }
-  function status(i) { var p = S().prog[i] || {}; if (done(i)) return '<span class="tag ok">Пройден</span>'; if (!open(i)) return ''; if (p.st === 'sent') return '<span class="tag wait">На проверке</span>'; if (p.st === 'back') return '<span class="tag bad">На доработку</span>'; return '<span class="tag pink">' + (les()[i].hw ? 'Ждёт задание' : 'Открыт') + '</span>'; }
+  function status(i) { var p = S().prog[i] || {}; if (done(i)) return '<span class="tag ok">Пройден</span>'; if (!open(i)) return ''; if (p.st === 'sent') return '<span class="tag wait">На проверке</span>'; if (p.st === 'back') return '<span class="tag bad">На доработку</span>'; var k = les()[i].k; return '<span class="tag pink">' + (k === 'practice' ? 'Ждёт задание' : k === 'test' ? 'Пройдите тест' : 'Открыт') + '</span>'; }
   function file(m) { return '<button class="file" onclick="A.toast(\'Файл появится, когда Алина загрузит материалы\')"><span class="file__ic">PDF</span><span class="file__t"><b>' + E(m[0]) + '</b><small>' + E(m[1]) + '</small></span><span class="file__d">' + A.I.dl + '</span></button>'; }
-  function ktabs(cur) { return [['', 'Главная', 'home'], ['kurs', 'Мой курс', 'book'], ['chat', 'Куратор', 'chat', unreadS()], ['sert', 'Сертификаты', 'cert'], ['zapisi', 'Записи', 'cal']]; }
+  function ktabs(cur) { return [['', 'Главная', 'home'], ['kurs', 'Мой курс', 'book'], ['chat', 'Куратор', 'chat', unreadS()]]; }
 
   A.route('/kabinet', function (arg) {
     A.onScroll = null;
     var sub = arg[0] || '', c = myCourse(), L = les(), body = '';
     if (sub === '') {
       var pc = Math.round(dcount() / L.length * 100), ci = cur(), sentN = Object.keys(S().prog).filter(function (k) { return S().prog[k].st === 'sent'; }).length;
-      body = top('Здравствуйте, <em>' + E(S().me.name.split(' ')[0]) + '</em>', 'Ваше обучение и записи — в одном месте') +
+      body = top('Здравствуйте, <em>' + E(S().me.name.split(' ')[0]) + '</em>', 'Ваше обучение — в одном месте') +
         '<div class="g3" style="margin-bottom:16px"><div class="kpi"><b>' + pc + '%</b><span>курса пройдено</span></div><div class="kpi"><b>' + dcount() + '/' + L.length + '</b><span>уроков</span></div><div class="kpi"><b>' + sentN + '</b><span>заданий на проверке</span></div><div class="kpi"><b>' + (75 - 8) + '</b><span>дней доступа осталось</span></div></div>' +
         '<div class="g2"><div class="stk2"><div class="cardx" style="background:var(--navy);color:#F4EEF2"><div style="display:flex;gap:18px;align-items:center"><div class="ring" style="--p:' + pc + '"><b style="color:var(--ink)">' + pc + '%</b></div><div><span class="tag pink">Онлайн-курс</span><h2 style="margin:10px 0 0;color:#fff">' + E(c.t) + '</h2></div></div>' +
           '<div style="margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)"><span style="font-size:13px;opacity:.65">Следующий урок</span><div style="font:500 26px/1.15 var(--serif);margin:6px 0 16px">' + (ci + 1) + '. ' + E(L[ci].t) + '</div><a class="btn btn--pink" href="#/kabinet/urok/' + ci + '">Продолжить <span class="ar">→</span></a></div></div>' +
           '<div class="cardx"><h2>Последние события</h2>' + [S().prog[2] && S().prog[2].st === 'sent' ? ['wait', 'Задание к уроку 3 отправлено на проверку'] : null, ['ok', 'Урок 2 пройден'], ['pink', 'Алина ответила в чате']].filter(Boolean).map(function (r) { return '<div class="row2"><span class="tag ' + r[0] + '">●</span><div class="m"><b style="font-weight:400">' + r[1] + '</b></div></div>'; }).join('') + '</div></div>' +
-        '<div class="stk2"><div class="cardx"><h2>Куратор</h2><div class="row2"><span class="av">АГ</span><div class="m"><b>Алина Грубникова</b><span>отвечает в течение дня</span></div></div><a class="btn btn--sm" href="#/kabinet/chat" style="margin-top:10px">Написать</a></div>' +
+        '<div class="stk2"><div class="cardx"><h2>Быстрый вход</h2><p class="muted" style="margin-bottom:12px">Привяжите аккаунт, чтобы входить в одно касание. Вход по почте ' + E(S().me.email || 'anna@mail.ru') + ' остаётся.</p><div class="sso">' +
+          [['vk', 'VK ID'], ['ya', 'Яндекс ID']].map(function (x) { var on = (S().sso || {})[x[0]]; return '<button class="sso__b ' + x[0] + (on ? ' on' : '') + '" data-sso="' + x[0] + '">' + (on ? '✓ ' + x[1] + ' привязан' : 'Привязать ' + x[1]) + '</button>'; }).join('') + '</div></div>' +
+          '<div class="cardx"><h2>Куратор</h2><div class="row2"><span class="av">АГ</span><div class="m"><b>Алина Грубникова</b><span>отвечает в течение дня</span></div></div><a class="btn btn--sm" href="#/kabinet/chat" style="margin-top:10px">Написать</a></div>' +
         '<div class="cardx"><h2>Ещё курсы</h2>' + ['mater', 'visual'].map(function (id) { var x = A.course(id); return '<a class="row2" href="#/kurs/' + id + '"><img src="' + A.img(A.COVER[id], 480) + '" style="width:56px;height:56px;border-radius:12px;object-fit:cover"><div class="m"><b>' + E(x.t) + '</b><span>' + A.rub(x.p) + '</span></div><span>→</span></a>'; }).join('') + '</div></div></div>';
     } else if (sub === 'kurs') {
       var M = A.modules(c), pc = Math.round(dcount() / L.length * 100), ci = cur(), nx = L[ci];
@@ -48,7 +51,7 @@
         '<div class="g2"><div class="stk2">' + M.map(function (md, k) {
           var idx = L.map(function (l, i) { return i; }).filter(function (i) { return L[i].mod === k; }), dn = idx.filter(done).length, lock = !open(idx[0]);
           return '<section class="cardx mod' + (lock ? ' is-lock' : '') + '"><div class="mod__h"><div><span class="cap2">Модуль ' + (k + 1) + '</span><h2>' + E(md.t) + '</h2><p class="muted">' + E(md.d) + '</p></div><span class="mod__c' + (dn === idx.length ? ' ok' : '') + '">' + dn + '/' + idx.length + '</span></div><div class="les">' +
-            idx.map(function (i) { var l = L[i], o = open(i); return '<button ' + (o ? 'onclick="location.hash=\'#/kabinet/urok/' + i + '\'"' : 'disabled') + (i === ci ? ' aria-current="true"' : '') + '><span class="n' + (done(i) ? ' ok' : '') + '">' + (done(i) ? '✓' : i + 1) + '</span><span class="t"><b>' + E(l.t) + '</b><small>' + l.m + ' мин' + (l.hw ? ' · задание' : '') + '</small></span>' + (o ? status(i) : '<span class="lk">' + I.lock + '</span>') + '</button>'; }).join('') + '</div></section>';
+            idx.map(function (i) { var l = L[i], o = open(i); return '<button ' + (o ? 'onclick="location.hash=\'#/kabinet/urok/' + i + '\'"' : 'disabled') + (i === ci ? ' aria-current="true"' : '') + '><span class="n' + (done(i) ? ' ok' : '') + '">' + (done(i) ? '✓' : i + 1) + '</span><span class="t"><b>' + E(l.t) + '</b><small>' + kind(l) + l.m + ' мин</small></span>' + (o ? status(i) : '<span class="lk">' + I.lock + '</span>') + '</button>'; }).join('') + '</div></section>';
         }).join('') + '</div>' +
         '<div class="stk2 aside"><div class="cardx"><h2>Как проходит обучение</h2><ol class="how"><li><b>Смотрите урок</b><span>Видео, конспект и материалы — в любое время</span></li><li><b>Выполняете задание</b><span>Фото работы и пара слов о том, что получилось</span></li><li><b>Алина проверяет</b><span>Обычно в течение дня, с комментарием</span></li><li><b>Открывается следующий урок</b><span>Уведомление придёт в Telegram</span></li></ol></div>' +
         '<div class="cardx cur"><img src="' + A.img('alina', 480) + '" alt="Алина Грубникова"><div><small class="muted">Ваш куратор</small><b>Алина Грубникова</b><a class="btn btn--sm" href="#/kabinet/chat">Задать вопрос</a></div></div>' +
@@ -66,16 +69,22 @@
         '<div class="cardx"><h2>Об уроке</h2><p class="ltxt">' + E(l.d) + '</p><h3 class="sub3">В этом уроке</h3><ul class="pts">' + l.pts.map(function (x) { return '<li>' + E(x) + '</li>'; }).join('') + '</ul></div>' +
         '<div class="g2b"><div class="cardx"><h2>Таймкоды</h2><div class="tcs">' + l.tc.map(function (x) { return '<button data-tc="' + x[0] + '"><span>' + x[0] + '</span>' + E(x[1]) + '</button>'; }).join('') + '</div></div>' +
         '<div class="cardx"><h2>Материалы</h2>' + (window.MATS || []).map(file).join('') + '</div></div>';
-      if (l.hw) {
+      if (l.k === 'test') {
+        var res = p.st === 'passed' ? p : null;
+        body += '<div class="cardx hw" id="hw"><div class="hw__h"><h2>Тест по уроку</h2>' + kind(l) + '</div><p class="ltxt">' + l.quiz.length + ' вопроса · проверяется сразу. Чтобы открыть следующий урок, ответьте верно хотя бы на ' + Math.ceil(l.quiz.length * 2 / 3) + '.</p>' +
+          '<form id="qz" class="qz">' + l.quiz.map(function (q, qi) { return '<fieldset><legend><span>' + (qi + 1) + '</span>' + E(q.q) + '</legend>' + q.a.map(function (a, ai) { return '<label><input type="radio" name="q' + qi + '" value="' + ai + '"' + (res && ai === q.ok ? ' checked' : '') + '><span>' + E(a) + '</span></label>'; }).join('') + '</fieldset>'; }).join('') +
+          (res ? '<div class="cmt"><div><b>Тест пройден: ' + res.score + ' из ' + l.quiz.length + '</b>Можно перепройти для закрепления.</div></div>' : '') +
+          '<button class="btn btn--wide">' + (res ? 'Пройти ещё раз' : 'Проверить ответы') + '</button></form></div>';
+      } else if (l.k === 'practice') {
         body += '<div class="cardx hw" id="hw"><div class="hw__h"><h2>Домашнее задание</h2><ol class="steps">' + ['Отправить', 'Проверка', 'Принято'].map(function (x, k) { return '<li class="' + (k + 1 < st ? 'ok' : k + 1 === st ? 'on' : '') + '"><i>' + (k + 1 < st || st === 3 ? '✓' : k + 1) + '</i>' + x + '</li>'; }).join('') + '</ol></div>' +
           '<p class="ltxt">' + E(l.hw.t) + '</p><h3 class="sub3">Что прислать</h3><ul class="crit">' + l.hw.c.map(function (x) { return '<li>' + E(x) + '</li>'; }).join('') + '</ul>' +
           (p.comment ? '<div class="cmt ' + (p.st === 'back' ? 'bad' : '') + '"><img src="' + A.img('alina', 480) + '" alt=""><div><b>' + (p.st === 'back' ? 'Алина вернула на доработку' : 'Комментарий Алины') + '</b>' + E(p.comment) + '</div></div>' : '');
         if (p.st === 'sent' || p.st === 'ok') body += '<div class="ans"><b>Ваш ответ</b><span class="muted"> · ' + A.ago(p.at) + '</span>' + (p.text ? '<p>' + E(p.text) + '</p>' : '') + photos(p.photos) + '</div>' + (p.st === 'sent' ? '<p class="note">Алина проверит работу и напишет комментарий. Следующий урок откроется сразу после проверки — придёт уведомление.</p>' : '');
         else body += '<label class="drop"><input type="file" id="hwF" accept="image/*" multiple hidden><span class="drop__ic">' + I.cam + '</span><b>Добавить фото работы</b><small>до 4 фото · JPG или PNG</small></label><div class="photos" id="hwP"></div><div class="fld"><textarea class="inp" id="hwT" placeholder="Опишите, что получилось и что вызвало сложности">' + E(p.st === 'back' ? p.text : '') + '</textarea></div><button class="btn btn--wide" id="hwS">Отправить на проверку</button>';
         body += '</div>';
-      } else body += '<div class="cardx hw"><h2>Урок без задания</h2><p class="ltxt">Посмотрите видео и отметьте урок — сразу откроется следующий.</p>' + (done(i) ? '<span class="tag ok">Урок пройден</span>' : '<button class="btn btn--wide" id="lesD">Урок просмотрен</button>') + '</div>';
+      } else body += '<div class="cardx hw"><div class="hw__h"><h2>Теоретический урок</h2>' + kind(l) + '</div><p class="ltxt">Посмотрите видео и прочитайте конспект. Когда всё понятно — отметьте урок, и сразу откроется следующий.</p>' + (done(i) ? '<span class="tag ok">Урок изучен</span>' : '<button class="btn btn--wide" id="lesD">Урок изучен</button>') + '</div>';
       body += '<div class="lnav">' + (i > 0 ? '<a class="lnav__a" href="#/kabinet/urok/' + (i - 1) + '"><small>←\u00a0Предыдущий</small><b>' + E(L[i - 1].t) + '</b></a>' : '<span></span>') +
-        (nxt ? (open(i + 1) ? '<a class="lnav__a r" href="#/kabinet/urok/' + (i + 1) + '"><small>Следующий\u00a0→</small><b>' + E(nxt.t) + '</b></a>' : '<span class="lnav__a r off"><small>' + I.lock + ' Следующий</small><b>Откроется после ' + (l.hw ? 'проверки задания' : 'просмотра') + '</b></span>') : '<a class="lnav__a r" href="#/kabinet/sert"><small>Финиш\u00a0→</small><b>Получить сертификат</b></a>') + '</div>' +
+        (nxt ? (open(i + 1) ? '<a class="lnav__a r" href="#/kabinet/urok/' + (i + 1) + '"><small>Следующий\u00a0→</small><b>' + E(nxt.t) + '</b></a>' : '<span class="lnav__a r off"><small>' + I.lock + ' Следующий</small><b>Откроется после ' + (l.k === 'practice' ? 'проверки задания' : l.k === 'test' ? 'теста' : 'изучения урока') + '</b></span>') : '<a class="lnav__a r" href="#/kabinet/kurs"><small>Финиш\u00a0→</small><b>Сертификат об окончании</b></a>') + '</div>' +
         '<div class="ask"><div><b>Остался вопрос по уроку?</b><span>Алина ответит в чате, уведомление придёт в Telegram</span></div><a class="btn btn--sm btn--ghost" href="#/kabinet/chat">Написать куратору</a></div></div>' +
         '<aside class="lside"><div class="cardx"><div class="lside__p"><div class="ring" style="--p:' + Math.round(dcount() / L.length * 100) + '"><b>' + Math.round(dcount() / L.length * 100) + '%</b></div><div><b>' + E(c.t) + '</b><span class="muted">' + dcount() + ' из ' + L.length + ' уроков</span></div></div>' +
         M2.map(function (md, k) { return '<details class="lside__m"' + (k === l.mod ? ' open' : '') + '><summary><span>Модуль ' + (k + 1) + '</span>' + E(md.t) + '</summary>' + L.map(function (x, j) { if (x.mod !== k) return ''; var o = open(j); return '<a ' + (o ? 'href="#/kabinet/urok/' + j + '"' : 'aria-disabled="true"') + (j === i ? ' aria-current="page"' : '') + '><i class="' + (done(j) ? 'ok' : '') + '">' + (done(j) ? '✓' : o ? j + 1 : '') + (o || done(j) ? '' : I.lock) + '</i>' + E(x.t) + '</a>'; }).join('') + '</details>'; }).join('') + '</div></aside></div>';
@@ -85,18 +94,16 @@
         v.querySelectorAll('[data-tc]').forEach(function (b) { b.onclick = function () { v.querySelector('#pl').scrollIntoView({ behavior: 'smooth', block: 'center' }); A.toast('Видео перемотается на ' + b.dataset.tc); }; });
         var f = v.querySelector('#hwF'); if (f) f.onchange = function () { [].slice.call(f.files, 0, 4 - tmp.length).forEach(function (file) { A.compress(file, 1280, function (u) { tmp.push(u); v.querySelector('#hwP').innerHTML = tmp.map(function (s) { return '<img src="' + s + '" alt="">'; }).join(''); }); }); };
         var s = v.querySelector('#hwS'); if (s) s.onclick = function () { var t = v.querySelector('#hwT').value.trim(); if (!t && !tmp.length) { A.toast('Добавьте фото или напишите ответ'); return; } S().prog[i] = { st: 'sent', text: t, photos: tmp, at: Date.now() }; A.save(); A.toast('Отправлено Алине на проверку'); A.rerender(); };
-        var d = v.querySelector('#lesD'); if (d) d.onclick = function () { S().prog[i] = { st: 'done', at: Date.now() }; A.save(); A.toast('Урок пройден — следующий открыт'); A.rerender(); };
+        var qz = v.querySelector('#qz'); if (qz) qz.onsubmit = function (e) { e.preventDefault(); var miss = 0, sc = 0;
+          l.quiz.forEach(function (q, qi) { var ch = qz.querySelector('input[name=q' + qi + ']:checked'); var fs = qz.querySelectorAll('fieldset')[qi]; fs.classList.remove('ok', 'bad'); if (!ch) { miss++; return; } var ok = +ch.value === q.ok; if (ok) sc++; fs.classList.add(ok ? 'ok' : 'bad'); });
+          if (miss) { A.toast('Ответьте на все вопросы'); return; }
+          if (sc >= Math.ceil(l.quiz.length * 2 / 3)) { S().prog[i] = { st: 'passed', score: sc, at: Date.now() }; A.save(); A.toast('Тест пройден: ' + sc + ' из ' + l.quiz.length + ' — следующий урок открыт'); setTimeout(A.rerender, 900); }
+          else A.toast('Верно ' + sc + ' из ' + l.quiz.length + ' — пересмотрите урок и попробуйте ещё раз'); };
+        var d = v.querySelector('#lesD'); if (d) d.onclick = function () { S().prog[i] = { st: 'done', at: Date.now() }; A.save(); A.toast('Урок изучен — следующий открыт'); A.rerender(); };
       } };
     } else if (sub === 'chat') {
       S().seen.s = Date.now(); A.save(); body = chat('s');
       return { html: shell('kabinet', ktabs(), 'chat', body), mount: chatMount('s') };
-    } else if (sub === 'sert') {
-      var fin = dcount() === L.length;
-      body = top('Сертификаты', 'Сертификаты об обучении и подарочные сертификаты студии') + '<div class="g2"><div class="cardx"><h2>Об окончании курса</h2><div style="aspect-ratio:1.414;border-radius:16px;background:#FBF7F5;color:#0E1A33;border:1px solid var(--line);display:grid;place-items:center;text-align:center;padding:20px;position:relative;filter:' + (fin ? 'none' : 'grayscale(1)') + ';opacity:' + (fin ? 1 : .55) + '"><div><span class="lgo lgo--v" style="font-size:44px;color:#0E1A33;margin:0 auto 12px">' + A.LOGO.replace('<span class="lgo">', '') + '<div class="cap">Сертификат</div><div style="font:italic 500 34px var(--serif);margin:8px 0">' + E(c.t) + '</div><div class="muted">' + E(S().me.name) + '</div></div></div><p class="muted" style="margin-top:12px">' + (fin ? 'Готов! Можно скачать или заказать бумажный.' : 'Откроется после финального задания: пройдено ' + dcount() + ' из ' + L.length + ' уроков.') + '</p></div>' +
-        '<div class="cardx"><h2>Подарочные</h2>' + S().certs.map(function (x) { return '<div class="row2"><span class="tag pink">№ ' + x.n + '</span><div class="m"><b>' + A.rub(x.left) + '</b><span>из ' + A.rub(x.sum) + ' · до ' + A.dshort(x.till) + '</span></div></div>'; }).join('') + '<button class="btn btn--sm" data-gift style="margin-top:12px">Подарить сертификат</button></div></div>';
-    } else if (sub === 'zapisi') {
-      var mine = S().bookings.filter(function (b) { return b.site; });
-      body = top('Записи в студию', 'Онлайн-запись через DIKIDI') + '<div class="cardx" style="max-width:720px">' + (mine.length ? mine.map(function (b) { return '<div class="row2"><span class="tag navy">' + A.dshort(b.day) + '</span><div class="m"><b>' + E(b.svc) + '</b><span>' + b.time + ' · ' + A.rub(b.price) + '</span></div></div>'; }).join('') : '<p class="empty">Пока нет записей</p>') + '<button class="btn" data-book style="margin-top:14px">Записаться онлайн</button></div>';
     }
     return shell('kabinet', ktabs(), sub, body);
   });
@@ -117,7 +124,7 @@
   function stageName(s) { return (STAGES.filter(function (x) { return x[0] === s; })[0] || [0, s])[1]; }
   function queue() { var q = []; var L = les(); Object.keys(S().prog).forEach(function (k) { if (S().prog[k].st === 'sent') q.push({ me: 1, i: +k, l: L[k], p: S().prog[k] }); }); S().others.forEach(function (o) { if (o.hw) q.push({ o: o, p: o.hw }); }); return q; }
   function unreadC() { return S().chat.filter(function (m) { return m.f === 's' && m.at > (S().seen.c || 0); }).length; }
-  function ctabs() { return [['', 'Воронка', 'funnel', S().leads.filter(function (l) { return l.stage === 'new'; }).length], ['dz', 'Задания', 'hw', queue().length], ['uchenitsy', 'Ученицы', 'users'], ['chat', 'Сообщения', 'chat', unreadC()], ['zapisi', 'Записи', 'cal'], ['analitika', 'Аналитика', 'chart'], ['eksport', 'Выгрузка', 'dl']]; }
+  function ctabs() { return [['', 'Воронка', 'funnel', S().leads.filter(function (l) { return l.stage === 'new'; }).length], ['dz', 'Задания', 'hw', queue().length], ['uchenitsy', 'Ученицы', 'users'], ['kursy', 'Курсы', 'book'], ['chat', 'Сообщения', 'chat', unreadC()], ['analitika', 'Аналитика', 'chart'], ['eksport', 'Выгрузка', 'dl']]; }
 
   A.route('/crm', function (arg) {
     A.onScroll = null;
@@ -160,18 +167,26 @@
           if (it.me) { it.p.st = ok ? 'ok' : 'back'; it.p.comment = cm || 'Отличная работа! Следующий урок открыт.'; } else { it.o.hw = null; if (ok) it.o.done++; }
           A.save(); A.toast(ok ? 'Принято — у ученицы открылся следующий урок' : 'Возвращено с комментарием'); A.rerender(); });
       } };
+    } else if (sub === 'kursy') {
+      var cid = arg[1] || 'mani', cc = A.course(cid) || A.course('mani'), CL = A.lessons(cc), MM = A.modules(cc);
+      var cnt = { theory: 0, test: 0, practice: 0 }; CL.forEach(function (x) { cnt[x.k]++; });
+      body = top('Курсы', 'Структура курса и тип каждого урока') +
+        '<div class="cardx" style="margin-bottom:16px"><div class="seg seg--wrap" id="csel">' + COURSES.filter(function (x) { return x.f === 'online'; }).map(function (x) { return '<button aria-pressed="' + (x.id === cc.id) + '" data-c="' + x.id + '">' + E(x.t) + '</button>'; }).join('') + '</div></div>' +
+        '<div class="g2"><div class="stk2">' + MM.map(function (md, k) { return '<section class="cardx"><span class="cap2">Модуль ' + (k + 1) + '</span><h2 style="margin-top:6px">' + E(md.t) + '</h2><div class="bld">' +
+          CL.map(function (x, i) { if (x.mod !== k) return ''; return '<div class="bld__r"><span class="bld__n">' + (i + 1) + '</span><div class="bld__t"><b>' + E(x.t) + '</b><small>' + x.m + '\u00a0мин' + (x.k === 'test' ? ' · ' + x.quiz.length + ' вопроса' : '') + '</small></div><div class="seg seg--sm" data-i="' + i + '">' + [['theory', 'Теория'], ['test', 'Тест'], ['practice', 'Задание']].map(function (t) { return '<button aria-pressed="' + (x.k === t[0]) + '" data-k="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div></div>'; }).join('') +
+          '</div><button class="lnk" style="margin-top:14px" onclick="A.toast(\'Добавление уроков и загрузка видео появятся на сервере\')">+ Добавить урок</button></section>'; }).join('') + '</div>' +
+        '<div class="stk2"><div class="cardx"><h2>Итого в курсе</h2><div class="row2"><span class="tag">Теория</span><div class="m"><b>' + cnt.theory + '</b><span>посмотреть и отметить</span></div></div><div class="row2"><span class="tag test">Тест</span><div class="m"><b>' + cnt.test + '</b><span>проверяется автоматически</span></div></div><div class="row2"><span class="tag pink">Задание</span><div class="m"><b>' + cnt.practice + '</b><span>проверяете вы в «Заданиях»</span></div></div></div>' +
+        '<div class="cardx"><h2>Как это работает</h2><ul class="pts"><li>Теория — ученица смотрит урок и нажимает «Урок изучен»</li><li>Тест — 3 вопроса, открывает следующий урок при 2 верных ответах</li><li>Задание — фото работы, следующий урок откроется после вашей проверки</li></ul></div></div></div>';
+      return { html: shell('crm', ctabs(), 'kursy', body), mount: function (v) {
+        v.querySelector('#csel').onclick = function (e) { var b = e.target.closest('[data-c]'); if (b) location.hash = '#/crm/kursy/' + b.dataset.c; };
+        v.addEventListener('click', function (e) { var b = e.target.closest('.seg--sm [data-k]'); if (!b) return; var i = +b.parentNode.dataset.i; S().ltype = S().ltype || {}; S().ltype[cc.id] = S().ltype[cc.id] || {}; S().ltype[cc.id][i] = b.dataset.k; A.save(); A.toast('Урок ' + (i + 1) + ': ' + b.textContent.toLowerCase() + ' — у учениц уже обновилось'); A.rerender(); });
+      } };
     } else if (sub === 'uchenitsy') {
       var list = [{ name: S().me.name, course: S().me.course, done: dcount(), all: les().length, last: Date.now() - 36e5, hw: queue().filter(function (x) { return x.me; }).length }].concat(S().others.map(function (o) { return { name: o.name, course: o.course, done: o.done, all: A.lessons(A.course(o.course)).length, last: o.last, hw: o.hw ? 1 : 0 }; }));
       body = top('Ученицы', list.length + ' активных · прогресс и задания') + '<div class="cardx"><div class="tblw"><table class="tbl"><thead><tr><th>Ученица</th><th>Курс</th><th>Прогресс</th><th>Задания</th><th>Была</th></tr></thead><tbody>' + list.map(function (s) { var pc = Math.round(s.done / s.all * 100); return '<tr><td><b style="font-weight:500">' + E(s.name) + '</b></td><td>' + E(A.course(s.course).t) + '</td><td style="min-width:140px"><div class="bar"><i style="width:' + pc + '%"></i></div><small class="muted">' + s.done + '/' + s.all + '</small></td><td>' + (s.hw ? '<span class="tag wait">' + s.hw + ' на проверке</span>' : (pc === 100 ? '<span class="tag ok">Завершила</span>' : '<span class="tag">—</span>')) + '</td><td class="muted">' + A.ago(s.last) + '</td></tr>'; }).join('') + '</tbody></table></div></div>';
     } else if (sub === 'chat') {
       S().seen.c = Date.now(); A.save();
       return { html: shell('crm', ctabs(), 'chat', chat('c')), mount: chatMount('c') };
-    } else if (sub === 'zapisi') {
-      var B = S().bookings.slice().sort(function (a, b) { return a.day - b.day || a.time.localeCompare(b.time); }), days = {};
-      B.forEach(function (b) { (days[b.day] = days[b.day] || []).push(b); });
-      body = top('Записи <em>студии</em>', 'Синхронизация с DIKIDI · ' + B.length + ' записей') + '<div class="g3" style="margin-bottom:16px"><div class="kpi"><b>' + B.filter(function (b) { return b.day === A.today(); }).length + '</b><span>сегодня</span></div><div class="kpi"><b>' + B.length + '</b><span>на неделе</span></div><div class="kpi"><b>' + A.rub(B.reduce(function (s, b) { return s + b.price; }, 0)).replace(' ₽', '') + '</b><span>₽ ожидается</span></div><div class="kpi"><b>' + S().certs.length + '</b><span>сертификатов</span></div></div>' +
-        '<div class="g2"><div class="stk2">' + Object.keys(days).map(function (d) { return '<div class="cardx"><h2>' + (+d === A.today() ? 'Сегодня' : +d === A.today() + A.DAY ? 'Завтра' : A.dlong(+d)) + '</h2>' + days[d].map(function (b) { return '<div class="row2"><span class="tag navy">' + b.time + '</span><div class="m"><b>' + E(b.name) + (b.site ? ' <span class="tag pink">с сайта</span>' : '') + '</b><span>' + E(b.svc) + '</span></div><b style="font-weight:500">' + A.rub(b.price) + '</b></div>'; }).join('') + '</div>'; }).join('') + '</div>' +
-        '<div class="cardx"><h2>Подарочные сертификаты</h2>' + S().certs.map(function (x) { return '<div class="row2"><span class="tag pink">' + x.n + '</span><div class="m"><b>' + E(x.who) + '</b><span>остаток ' + A.rub(x.left) + ' из ' + A.rub(x.sum) + '</span></div></div>'; }).join('') + '</div></div>';
     } else if (sub === 'analitika') {
       var P = S().pay, mx = Math.max.apply(null, P.map(function (p) { return p.sum; })), tot = P.reduce(function (s, p) { return s + p.sum; }, 0), Ls = S().leads;
       var fun = [['Заявки', Ls.length], ['Связались', Ls.filter(function (l) { return l.stage !== 'new'; }).length], ['Ждут оплату+', Ls.filter(function (l) { return ['pay', 'study', 'done'].indexOf(l.stage) >= 0; }).length], ['Оплатили', Ls.filter(function (l) { return ['study', 'done'].indexOf(l.stage) >= 0; }).length]];
@@ -182,7 +197,7 @@
         '<div class="cardx"><h2>Источники</h2>' + Object.keys(src).map(function (k) { return '<div class="row2"><div class="m"><b style="font-weight:400">' + E(k) + '</b></div><b>' + src[k] + '</b></div>'; }).join('') + '</div></div></div>';
     } else if (sub === 'eksport') {
       body = top('Выгрузка <em>в таблицы</em>', 'Файлы открываются в Excel и Google Таблицах') + '<div class="g2"><div class="cardx"><h2>Скачать</h2>' +
-        [['leads', 'Заявки и клиентки', 'имя, телефон, курс, этап, сумма, источник'], ['students', 'Ученицы и прогресс', 'курс, пройдено уроков, задания'], ['bookings', 'Записи студии', 'дата, время, услуга, сумма'], ['pay', 'Оплаты', 'дата и сумма']].map(function (x) { return '<div class="row2"><span class="tag">CSV</span><div class="m"><b>' + x[1] + '</b><span>' + x[2] + '</span></div><button class="btn btn--xs" data-csv="' + x[0] + '">Скачать</button></div>'; }).join('') + '</div>' +
+        [['leads', 'Заявки и клиентки', 'имя, телефон, курс, этап, сумма, источник'], ['students', 'Ученицы и прогресс', 'курс, пройдено уроков, задания'], ['pay', 'Оплаты', 'дата и сумма']].map(function (x) { return '<div class="row2"><span class="tag">CSV</span><div class="m"><b>' + x[1] + '</b><span>' + x[2] + '</span></div><button class="btn btn--xs" data-csv="' + x[0] + '">Скачать</button></div>'; }).join('') + '</div>' +
         '<div class="cardx"><h2>Как открыть в Google Таблицах</h2><ol style="list-style:decimal;padding-left:18px;display:grid;gap:8px;font-size:14.5px"><li>Скачайте файл кнопкой слева</li><li>Откройте sheets.google.com → «Пустой файл»</li><li>«Файл» → «Импорт» → «Загрузка» → выберите файл</li><li>Готово — всё по колонкам</li></ol><p class="muted" style="margin-top:12px">На хостинге добавим автоматическую выгрузку раз в неделю на почту.</p></div></div>';
       return { html: shell('crm', ctabs(), 'eksport', body), mount: function (v) { v.addEventListener('click', function (e) { var b = e.target.closest('[data-csv]'); if (b) csv(b.dataset.csv); }); } };
     }
@@ -217,10 +232,11 @@
     var rows;
     if (kind === 'leads') rows = [['Имя', 'Телефон', 'Почта', 'Курс', 'Этап', 'Сумма', 'Источник', 'Дата заявки', 'Комментарий']].concat(A.S.leads.map(function (l) { return [l.name, l.phone, l.email, A.course(l.course).t, stageName(l.stage), l.sum, l.src, A.dshort(l.at), l.note]; }));
     if (kind === 'students') rows = [['Ученица', 'Курс', 'Пройдено уроков', 'Всего уроков']].concat([[A.S.me.name, A.course(A.S.me.course).t, dcount(), les().length]]).concat(A.S.others.map(function (o) { return [o.name, A.course(o.course).t, o.done, A.lessons(A.course(o.course)).length]; }));
-    if (kind === 'bookings') rows = [['Дата', 'Время', 'Клиентка', 'Услуга', 'Сумма']].concat(A.S.bookings.map(function (b) { return [A.dshort(b.day), b.time, b.name, b.svc, b.price]; }));
     if (kind === 'pay') rows = [['Дата', 'Сумма']].concat(A.S.pay.map(function (p) { return [A.dshort(p.t), p.sum]; }));
     var text = '﻿' + rows.map(function (r) { return r.map(function (x) { x = String(x == null ? '' : x); return /[;"\n]/.test(x) ? '"' + x.replace(/"/g, '""') + '"' : x; }).join(';'); }).join('\r\n');
     var a = D.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' })); a.download = kind + '-' + new Date().toISOString().slice(0, 10) + '.csv'; D.body.appendChild(a); a.click(); a.remove();
     A.toast('Файл скачан — откройте в Excel или Google Таблицах');
   }
+  // привязка VK ID / Яндекс ID (демо; на сервере — OAuth)
+  D.addEventListener('click', function (e) { var b = e.target.closest('[data-sso]'); if (!b) return; var k = b.dataset.sso; S().sso = S().sso || {}; S().sso[k] = !S().sso[k]; A.save(); A.toast(S().sso[k] ? (k === 'vk' ? 'VK ID' : 'Яндекс ID') + ' привязан (демо)' : 'Привязка отключена'); A.rerender(); });
 })();
