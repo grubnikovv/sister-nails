@@ -1,7 +1,7 @@
 /* Публичные страницы сайта */
 (function () {
   var A = window.A, E = A.esc, D = document;
-  function ph(name, cls, alt, w) { return '<div class="ph ' + (cls || '') + '"><img src="' + A.img(name, w || 960) + '" alt="' + E(alt || '') + '" loading="lazy" decoding="async"></div>'; }
+  function ph(name, cls, alt, w) { return '<div class="ph ' + (cls || '') + '"><img src="' + A.img(name, w || 960) + '" srcset="' + A.img(name, 480) + ' 480w, ' + A.img(name, 960) + ' 960w" sizes="(max-width: 700px) 92vw, 640px" data-full="' + A.img(name, 960) + '" alt="' + E(alt || '') + '" loading="lazy" decoding="async"></div>'; }
   function ln(t, d) { return '<span class="ln"><span' + (d ? ' style="--d:' + d + 'ms"' : '') + '>' + t + '</span></span>'; }
   function lessonsCount(c) { return c.g.reduce(function (s, g) { return s + g[1].length; }, 0); }
   function card(c, i) {

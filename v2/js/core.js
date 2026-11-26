@@ -73,10 +73,13 @@
         { id: 'o2', name: 'Виктория Лебедева', course: 'duo', done: 12, last: n - 30 * 36e5 },
         { id: 'o3', name: 'Елена Орлова', course: 'mater', done: 4, last: n - 5 * DAY, fin: true }
       ],
+      v2p: 1,
       chat: [
         { f: 'c', t: 'Здравствуйте, Анна! Я Алина, ваш куратор. Пишите сюда любые вопросы — отвечу в течение дня', at: n - 4 * DAY },
         { f: 's', t: 'Здравствуйте! Какой аппарат лучше взять на старт?', at: n - 2 * DAY },
-        { f: 'c', t: 'Для начала хватит 30–35 тысяч оборотов. В уроке 5 разберём, какие фрезы нужны', at: n - 2 * DAY + 36e5 }
+        { f: 'c', t: 'Для начала хватит 30–35 тысяч оборотов. В уроке 5 разберём, какие фрезы нужны', at: n - 2 * DAY + 36e5 },
+        { f: 's', t: 'Сделала первый френч на подруге, посмотрите, пожалуйста', p: [A.img('nails-black', 960), A.img('nails-nude', 960)], at: n - 20 * 36e5 },
+        { f: 'c', t: 'Линия улыбки ровная, умница! На безымянном чуть толще — попробуйте кисть тоньше. Вот пример', p: [A.img('nails-milk', 960)], at: n - 18 * 36e5 }
       ],
       bookings: [
         { id: 'b1', name: 'Ольга', svc: 'Маникюр с гель-лаком', day: T, time: '11:00', price: 3000 },
@@ -92,7 +95,9 @@
       seen: {}
     };
   };
-  A.load = function () { var s; try { s = JSON.parse(localStorage.getItem(KEY)); } catch (e) {} A.S = s && s.leads ? s : A.seed(); };
+  A.load = function () { var s; try { s = JSON.parse(localStorage.getItem(KEY)); } catch (e) {} A.S = s && s.leads ? s : A.seed();
+    if (!A.S.v2p) { A.S.v2p = 1; var sd = A.seed(); sd.chat.forEach(function (m) { if (m.p && !A.S.chat.some(function (x) { return x.t === m.t; })) A.S.chat.push(m); }); A.S.chat.sort(function (a, b) { return a.at - b.at; }); } };
+  A.compress = function (file, max, cb) { var r = new FileReader(); r.onload = function () { var im = new Image(); im.onload = function () { var k = Math.min(1, max / Math.max(im.width, im.height)), cv = D.createElement('canvas'); cv.width = Math.round(im.width * k); cv.height = Math.round(im.height * k); cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height); cb(cv.toDataURL('image/jpeg', .78)); }; im.src = r.result; }; r.readAsDataURL(file); };
   A.save = function () { try { localStorage.setItem(KEY, JSON.stringify(A.S)); } catch (e) { A.toast('Не хватило места — фото не сохранилось'); } };
   A.reset = function () { A.S = A.seed(); A.save(); };
   A.load();
@@ -185,6 +190,27 @@
     var m = D.querySelector('meta[name=theme-color]'); if (m) m.content = t === 'dark' ? '#1E1D1F' : '#F0E9DF';
     setTimeout(function () { R.classList.remove('theme-anim'); }, 600);
   };
+  /* ---------- просмотр фото на весь экран ---------- */
+  A.lb = function (list, i) {
+    var el = D.getElementById('lb'); if (!el) { el = D.createElement('div'); el.id = 'lb'; el.className = 'lb'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.innerHTML = '<button class="lb__x" aria-label="Закрыть">×</button><button class="lb__a lb__p" aria-label="Предыдущее фото">‹</button><figure class="lb__f"><img alt=""></figure><button class="lb__a lb__n" aria-label="Следующее фото">›</button><div class="lb__c"></div>'; D.body.appendChild(el);
+      el.addEventListener('click', function (e) { if (e.target.closest('.lb__p')) return go(-1); if (e.target.closest('.lb__n')) return go(1); if (e.target.closest('.lb__x') || !e.target.closest('img')) close(); });
+      var x0 = null; el.addEventListener('touchstart', function (e) { x0 = e.touches.length === 1 ? e.touches[0].clientX : null; }, { passive: true });
+      el.addEventListener('touchend', function (e) { if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1); x0 = null; });
+      D.addEventListener('keydown', function (e) { if (!el.classList.contains('on')) return; if (e.key === 'Escape') close(); if (e.key === 'ArrowRight') go(1); if (e.key === 'ArrowLeft') go(-1); }); }
+    var L = list, k = i;
+    function show() { var im = el.querySelector('img'); im.src = L[k]; el.querySelector('.lb__c').textContent = L.length > 1 ? (k + 1) + ' / ' + L.length : ''; el.classList.toggle('one', L.length < 2); }
+    function go(d) { k = (k + d + L.length) % L.length; show(); }
+    function close() { el.classList.remove('on'); D.documentElement.style.overflow = ''; }
+    A.lb.go = go; show(); el.classList.add('on'); D.documentElement.style.overflow = 'hidden';
+  };
+  D.addEventListener('click', function (e) {
+    var im = e.target.closest('.ph img, .photos img, .msg__p img, [data-zoom]'); if (!im || e.target.closest('a,.cc,button')) return;
+    var grp = im.closest('.photos, .msg__p, .collage, .marq__t, .stk, .zoomg') || im.parentNode.parentNode;
+    var imgs = [].slice.call(grp.querySelectorAll('img')).filter(function (x) { return x.closest('.ph,.photos,.msg__p,[data-zoom]'); });
+    var src = function (x) { return (x.dataset.full || x.currentSrc || x.src).replace(/-480\.webp$/, '-960.webp'); };
+    var uniq = []; imgs.forEach(function (x) { var u = src(x); if (uniq.indexOf(u) < 0) uniq.push(u); });
+    A.lb(uniq, Math.max(0, uniq.indexOf(src(im))));
+  });
   A.toggleTheme = function () { A.setTheme(D.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); };
   A.start = function () {
     var th = D.getElementById('thm'); if (th) th.onclick = A.toggleTheme;
