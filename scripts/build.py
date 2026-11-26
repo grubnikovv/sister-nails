@@ -26,6 +26,14 @@ open(os.path.join(OUT, 'index.html'), 'w', encoding='utf-8').write(head + '</hea
 for sub in ('img', 'video', 'fonts', 'js', 'demo', 'v2'):
     d = os.path.join(SRC, sub)
     if os.path.isdir(d): shutil.copytree(d, os.path.join(OUT, sub), dirs_exist_ok=True)
+# номер версии файлов v2 при каждой сборке — чтобы браузеры не брали старые стили/скрипты из кэша
+import re as _re, time as _t
+_V = _t.strftime('%y%m%d%H%M')
+for _f in ('v2/index.html', 'v2/app.css', 'v2/js/core.js'):
+    _p = os.path.join(OUT, _f)
+    if os.path.exists(_p):
+        _s = open(_p, encoding='utf-8').read()
+        open(_p, 'w', encoding='utf-8').write(_re.sub(r'\?v=\d+', '?v=' + _V, _s))
 for f in ('manifest.json', 'sw.js'):
     if os.path.isfile(os.path.join(SRC, f)): shutil.copy(os.path.join(SRC, f), os.path.join(OUT, f))
 open(os.path.join(OUT, 'robots.txt'), 'w').write('User-agent: *\nDisallow: /server/\n\nSitemap: https://' + DOMAIN + '/sitemap.xml\n')

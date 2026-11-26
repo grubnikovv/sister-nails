@@ -749,7 +749,7 @@ body.app .fx-progress{display:none}
 .lgo{display:inline-grid;grid-template-columns:auto;justify-items:stretch;gap:.14em;font-size:34px;line-height:1;color:inherit}
 .wm{display:flex;align-items:flex-end}
 .wm__m{height:1.15em;width:auto;flex:none;margin:0 0 -.14em -.02em}
-.wm__r{height:.62em;aspect-ratio:655/125;flex:none;--u:url(../img/me-rest.webp)}
+.wm__r{height:.62em;aspect-ratio:655/125;flex:none;--u:url(../img/me-rest.webp?v=2611261510)}
 .lgo .lgo__s{display:block;width:100%;height:auto;margin-top:.12em;transition:opacity .5s var(--ease),transform .5s var(--ease)}
 .hdr.solid .lgo .lgo__s{opacity:0;transform:translateY(-3px)}
 .hdr.solid .wm{transform:translateY(.22em);transition:transform .5s var(--ease)}
