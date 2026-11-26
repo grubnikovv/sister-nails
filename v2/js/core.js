@@ -243,7 +243,8 @@
     view = D.getElementById('view'); curtain = D.getElementById('curtain');
     A.typo(D.getElementById('foot')); A.typo(D.getElementById('mnav')); addEventListener('hashchange', render); render();
     var hdr = D.getElementById('hdr'), last = 0, tick = false;
-    addEventListener('scroll', function () { if (tick) return; tick = true; requestAnimationFrame(function () { tick = false; var y = scrollY; hdr.classList.toggle('solid', y > 30); hdr.classList.toggle('hide', y > last && y > 400); last = y; if (A.onScroll) A.onScroll(y); }); }, { passive: true });
+    addEventListener('scroll', function () { if (tick) return; tick = true; requestAnimationFrame(function () { tick = false; var y = scrollY; var sol = hdr.classList.contains('solid'); if (!sol && y > 70) hdr.classList.add('solid'); else if (sol && y < 12) hdr.classList.remove('solid');
+      var dy = y - last; if (y < 300) { hdr.classList.remove('hide'); last = y; } else if (dy > 14) { hdr.classList.add('hide'); last = y; } else if (dy < -14) { hdr.classList.remove('hide'); last = y; } if (A.onScroll) A.onScroll(y); }); }, { passive: true });
     D.getElementById('burger').onclick = function () { var on = D.getElementById('mnav').classList.toggle('on'); D.body.classList.toggle('menu', on); };
   };
 })();

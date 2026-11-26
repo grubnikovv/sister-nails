@@ -768,3 +768,11 @@ body.app .fx-progress{display:none}
 .hdr.solid .wm{transform:none}
 body.menu .hdr{box-shadow:none}
 .hdr{transition:transform .6s var(--ease),background-color .15s linear,box-shadow .3s}
+
+/* шапка: всегда плотная (ничего не просвечивает), без рывков */
+.hdr,.hdr.solid{background:var(--grey)!important}
+.hdr{box-shadow:0 1px 0 transparent;transition:transform .45s var(--ease),box-shadow .3s}
+.hdr.solid{box-shadow:0 1px 0 var(--line),0 10px 30px -22px rgba(0,0,0,.45)}
+body.menu .hdr{background:transparent!important;box-shadow:none}
+.hdr__in{transition:height .45s var(--ease)}
+.hdr .lgo .lgo__s{transition:max-height .45s var(--ease),opacity .25s linear}
