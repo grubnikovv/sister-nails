@@ -776,3 +776,10 @@ body.menu .hdr{box-shadow:none}
 body.menu .hdr{background:transparent!important;box-shadow:none}
 .hdr__in{transition:height .45s var(--ease)}
 .hdr .lgo .lgo__s{transition:max-height .45s var(--ease),opacity .25s linear}
+
+/* логотип v4: всё слово «Мэй’Эйлин» гель-лаком (вырезано из генерации) */
+.wm__w{display:block;height:1.05em;width:auto;flex:none}
+.lgo{font-size:31px}
+.side .lgo,.abar .lgo{font-size:28px}
+@media(max-width:360px){.hdr .lgo{font-size:28px}.abar .lgo{font-size:25px}}
+.lgo .lgo__s{margin-top:.1em}
