@@ -17,10 +17,26 @@
   /* ---------- курсы: уроки из программы ---------- */
   A.COVER = { mani: 'nails-nude', pedi: 'pedicure-blue', duo: 'nails-wine', 'speed-mani': 'nails-black', 'speed-pedi': 'pedicure-blue', mater: 'nails-milk', visual: 'nails-wine', 'mani-off': 'nails-milk', 'pedi-off': 'pedicure-blue', 'duo-off': 'nails-black' };
   A.course = function (id) { return COURSES.filter(function (c) { return c.id === id; })[0]; };
+  A.plural = function (n, a, b, c) { var m = n % 10, h = n % 100; return n + '\u00a0' + (m === 1 && h !== 11 ? a : m >= 2 && m <= 4 && (h < 12 || h > 14) ? b : c); };
+  A.modules = function (c) {
+    var P = (window.PROGRAM || {})[c.id];
+    if (P) return P;
+    var all = []; c.g.forEach(function (g) { g[1].forEach(function (t) { all.push(t); }); });
+    var mods = [], n = Math.max(1, Math.ceil(all.length / 4));
+    for (var k = 0; k < n; k++) mods.push({ t: (c.g.length > 1 && c.g[k] && c.g[k][0]) || 'Модуль ' + (k + 1), d: c.d, l: all.slice(k * 4, k * 4 + 4).map(function (t) { return { t: t }; }) });
+    mods.forEach(function (md, k) { md.l.forEach(function (l, j) { var i = k * 4 + j; if (i % 3 === 2 || i === all.length - 1) l.hw = { t: 'Выполните практику по теме урока и пришлите фото работы крупным планом.', c: ['Фото до и после', 'Фото крупным планом при дневном свете'] }; }); });
+    return mods;
+  };
   A.lessons = function (c) {
     var out = [];
-    c.g.forEach(function (g) { g[1].forEach(function (t) { out.push({ t: (g[0] ? g[0] + ': ' : '') + t }); }); });
-    out.forEach(function (l, i) { l.m = 12 + (i * 7) % 30; if (i % 3 === 2 || i === out.length - 1) l.hw = 'Выполните практику по теме урока и пришлите фото работы крупным планом.'; });
+    A.modules(c).forEach(function (md, k) { md.l.forEach(function (l, j) {
+      var x = {}; for (var q in l) x[q] = l[q];
+      x.mod = k; x.mt = md.t; x.j = j; x.m = x.m || 12 + (out.length * 7) % 20;
+      x.d = x.d || 'Описание урока появится, когда Алина загрузит видео.';
+      x.pts = x.pts || ['Теория простым языком', 'Демонстрация на модели', 'Типичные ошибки и как их избежать'];
+      x.tc = x.tc || [['00:00', 'Вступление'], ['03:00', 'Теория'], ['08:00', 'Практика']];
+      out.push(x);
+    }); });
     return out;
   };
 
@@ -108,6 +124,7 @@
     dl: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
     out: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10"/></svg>',
     menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h16M4 16h16"/></svg>',
+    cam: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
     lock: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
   };
 
@@ -150,6 +167,7 @@
     while ((n = w.nextNode())) { var t = n.nodeValue, o = t;
       t = t.replace(SHORT, function (m, a, b) { return a + b + '\u00a0'; }).replace(SHORT, function (m, a, b) { return a + b + '\u00a0'; });
       t = t.replace(/ (—|–) /g, '\u00a0$1 ').replace(/(\d) (?=\d{3}\b)/g, '$1\u00a0').replace(/(\d) (?=(₽|мин|ч\b|дн|дня|дней|мес|урок|тем|лет|год|курс|выпуск|%))/g, '$1\u00a0');
+      t = t.replace(/([А-Яа-яЁёA-Za-z])-(?=[А-Яа-яЁёA-Za-z])/g, '$1-\u2060');
       if (t !== o) n.nodeValue = t; }
   };
   A.rerender = function () { first = true; render(); };
