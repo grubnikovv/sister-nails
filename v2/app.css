@@ -74,7 +74,7 @@ ul,ol{margin:0;padding:0;list-style:none}
 .mnav.on a:not(.btn){opacity:1;transform:none;transition-delay:.25s}
 .mnav .btn{opacity:0;transition:opacity .5s .2s}.mnav.on .btn{opacity:1;transition-delay:.55s}
 .mnav.on a:nth-child(2){transition-delay:.31s}.mnav.on a:nth-child(3){transition-delay:.37s}.mnav.on a:nth-child(4){transition-delay:.43s}.mnav.on a:nth-child(5){transition-delay:.49s}
-.mnav a em{font-style:italic;color:var(--pink)}
+
 .mnav .btn{margin-top:30px;align-self:flex-start}
 body.menu .hdr{background:transparent!important;-webkit-backdrop-filter:none;backdrop-filter:none}
 body.menu .ib{background:rgba(255,255,255,.1);color:#F4EEF2}
@@ -88,7 +88,8 @@ body.menu .ib{background:rgba(255,255,255,.1);color:#F4EEF2}
 .curtain{background:var(--navy)}
 .brand{position:absolute;inset:0;display:grid;place-items:center}
 .brand__row{display:flex;align-items:center;gap:14px}
-.brand__sq{width:clamp(64px,14vw,92px);aspect-ratio:1;border-radius:22px;background:var(--pink);color:var(--navy);display:grid;place-items:center;font:italic 600 clamp(28px,6vw,40px)/1 var(--serif);transform:scale(.4) rotate(-12deg);opacity:0}
+.brand__sq{width:clamp(64px,14vw,92px);aspect-ratio:1;border-radius:22px;background:#F0E9DF url(../img/grain-a.webp) 0 0/256px;color:#0E1A33;display:grid;place-items:center;transform:scale(.4) rotate(-12deg);opacity:0}
+.brand__sq .lgo{font-size:clamp(30px,6.6vw,42px)}
 .brand__w{overflow:hidden}
 .brand__w span{display:block;color:#F4EEF2;font:500 clamp(26px,6.4vw,44px)/1 var(--serif);white-space:nowrap;transform:translateX(-105%)}
 .brand__w small{display:block;font:500 10.5px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--pink);margin-top:8px;opacity:0}
@@ -681,3 +682,9 @@ body.app .ck{bottom:calc(96px + env(safe-area-inset-bottom))!important}
 @media print{.hdr,.foot,.dtoc,.dmeta__a,.ck,.lnk,.toast{display:none!important}.dhero{padding:0}.doc{box-shadow:none;padding:0}body{background:#fff!important}}
 .ck[hidden]{display:none!important}
 .tag.kd:not(.pink):not(.test){background:var(--card);box-shadow:inset 0 0 0 1px var(--line)}
+
+/* открытая страница в меню — цветом лака логотипа */
+:root{--lak:#D21C7C}
+.mnav a[aria-current]:not(.btn){color:var(--lak);font-style:italic}
+.nav a[aria-current]{color:var(--lak)}
+:root[data-theme=dark]{--lak:#F0469B}

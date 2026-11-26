@@ -20,7 +20,7 @@
       '<section class="hero"><div class="wrap hero__g">' +
         '<div><div class="hero__tag rv"><b>Новый поток</b>Старт сразу после оплаты</div>' +
         '<h1 class="h1">' + ln('Профессия') + ln('<em>мастера</em>', 90) + ln('маникюра', 180) + '</h1>' +
-        '<p class="lead rv" style="--d:250ms">A.S. Ногтевая академия и нейл студия Мэй’Эйлин Алины Грубниковой. Онлайн-школа с куратором и проверкой заданий — и студия, где делают маникюр, которым любуются.</p>' +
+        '<p class="lead rv" style="--d:250ms">Мэй’Эйлин — ногтевая академия и нейл студия Алины Грубниковой. Онлайн-школа с куратором и проверкой заданий — и студия, где делают маникюр, которым любуются.</p>' +
         '<div class="hero__acts rv" style="--d:320ms"><a class="btn" href="#/akademiya">Выбрать курс <span class="ar">→</span></a><a class="btn btn--ghost" href="#/studiya">Записаться на маникюр</a></div>' +
         '<ul class="stats4 rv" style="--d:400ms"><li><b data-n="50" data-s="+">0</b><span>выпускниц</span></li><li><b data-n="10">0</b><span>курсов</span></li><li><b data-n="5" data-s="+">0</b><span>лет практики</span></li><li><b>1:1</b><span>личный куратор</span></li></ul></div>' +
         '<div class="collage rv" id="col" style="--d:200ms">' + ph('nails-wine', 'p1', 'Маникюр Алины') + ph('alina', 'p2', 'Алина Грубникова') + ph('nails-nude', 'p3', 'Френч') + '</div>' +
@@ -48,7 +48,7 @@
   A.route('/akademiya', function () {
     A.onScroll = null;
     return { html:
-      '<section class="khero"><div class="wrap"><span class="cap rv">A.S. Ногтевая академия</span><h1 class="h1" style="margin:18px 0 26px">' + ln('Курсы') + ln('<em>академии</em>', 90) + '</h1>' +
+      '<section class="khero"><div class="wrap"><span class="cap rv">Ногтевая академия Мэй’Эйлин</span><h1 class="h1" style="margin:18px 0 26px">' + ln('Курсы') + ln('<em>академии</em>', 90) + '</h1>' +
         '<p class="lead rv">Онлайн — видеоуроки в личном кабинете, задания с проверкой и куратор. Офлайн — индивидуально, лично с Алиной.</p>' +
         '<div class="ftabs rv" data-pick id="ft" style="margin-top:34px"><button aria-pressed="true" data-v="all">Все курсы</button><button aria-pressed="false" data-v="start">С нуля</button><button aria-pressed="false" data-v="pro">Для мастеров</button><button aria-pressed="false" data-v="online">Онлайн</button><button aria-pressed="false" data-v="offline">Офлайн</button></div>' +
         '<div class="cgrid" id="cg">' + COURSES.map(card).join('') + '</div></div></section>' +

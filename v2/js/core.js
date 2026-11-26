@@ -166,7 +166,7 @@
       D.getElementById('hdr').hidden = isApp; D.getElementById('foot').hidden = isApp || m.base === '/vhod';
       view.innerHTML = typeof out === 'string' ? out : out.html;
       if (!sameSection) scrollTo(0, 0);
-      D.querySelectorAll('.nav a,.mnav a').forEach(function (a) { if (a.getAttribute('href') === '#' + m.base) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+      var nb = { '/kurs': '/akademiya' }[m.base] || m.base; D.querySelectorAll('.nav a,.mnav a').forEach(function (a) { if (a.getAttribute('href') === '#' + nb) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
       if (out.mount) out.mount(view);
       A.reveal(view); A.pick(view);
       D.getElementById('mnav').classList.remove('on'); D.body.classList.remove('menu');
