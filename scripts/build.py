@@ -23,7 +23,7 @@ if 'rel="icon"' not in head:
     head += '<link rel="icon" href="data:,">\n'
 os.makedirs(OUT, exist_ok=True)
 open(os.path.join(OUT, 'index.html'), 'w', encoding='utf-8').write(head + '</head><body>\n' + s.lstrip() + '\n</body></html>\n')
-for sub in ('img', 'video', 'fonts', 'js', 'demo'):
+for sub in ('img', 'video', 'fonts', 'js', 'demo', 'v2'):
     d = os.path.join(SRC, sub)
     if os.path.isdir(d): shutil.copytree(d, os.path.join(OUT, sub), dirs_exist_ok=True)
 for f in ('manifest.json', 'sw.js'):

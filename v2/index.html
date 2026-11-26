@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>A.S. Ногтевая академия · Нейл студия Мэй’Эйлин</title><meta name="robots" content="noindex">
+<meta name="theme-color" content="#E6E7E8">
+<link rel="preload" href="../fonts/cormorant-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/onest-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="app.css">
+</head><body>
+<header class="hdr" id="hdr"><div class="wrap hdr__in">
+  <a class="logo" href="#/" aria-label="На главную"><img src="../img/logo.webp" alt="Нейл Студия Мэй’Эйлин"></a>
+  <nav class="nav" aria-label="Разделы"><a href="#/akademiya">Академия</a><a href="#/studiya">Студия</a><a href="#/alina">Об Алине</a><a href="#/kontakty">Контакты</a></nav>
+  <div class="hdr__r"><a class="ib" href="#/vhod" aria-label="Войти"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.3-3.6 4.1-5.4 7.5-5.4s6.2 1.8 7.5 5.4"/></svg></a><a class="btn btn--sm" href="#/akademiya">Выбрать курс</a><button class="ib burger" id="burger" aria-label="Меню"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h16M4 16h16"/></svg></button></div>
+</div></header>
+<nav class="mnav" id="mnav" aria-label="Меню"><a href="#/">Главная</a><a href="#/akademiya"><em>Академия</em></a><a href="#/studiya">Студия</a><a href="#/alina">Об Алине</a><a href="#/kontakty">Контакты</a><a class="btn btn--pink" href="#/vhod">Войти в кабинет</a></nav>
+
+<div id="view"></div>
+
+<footer class="foot" id="foot"><div class="wrap">
+  <div class="foot__big">Станьте мастером, <em>к которому записываются</em></div>
+  <div style="margin-top:36px"><a class="btn btn--pink" href="#/akademiya">Выбрать курс <span class="ar">→</span></a></div>
+  <div class="foot__g">
+    <div><b>Академия</b><a href="#/akademiya">Все курсы</a><a href="#/kurs/mani">Маникюр с нуля</a><a href="#/kurs/duo">Маникюр + педикюр</a></div>
+    <div><b>Студия</b><a href="#/studiya">Услуги и цены</a><a href="#/studiya">Онлайн-запись</a><a href="#/studiya">Сертификаты</a></div>
+    <div><b>Связь</b><a href="https://t.me/alina_sergeevna28">Telegram</a><a href="https://wa.me/79362872201">WhatsApp · +7 936 287-22-01</a><a href="mailto:academy.nail@mail.ru">academy.nail@mail.ru</a></div>
+    <div><b>Кабинет</b><a href="#/kabinet">Личный кабинет</a><a href="#/kontakty">Оставить заявку</a><a href="#/vhod">Оферта и политика</a></div>
+  </div>
+  <small>ИП Грубникова Алина Сергеевна · ИНН 345600043182 · ОГРНИП 325344300003940</small>
+  <a class="adm" href="#/crm">Вход для куратора</a>
+</div></footer>
+
+<div class="curtain" id="curtain" aria-hidden="true"><b>Мэй’Эйлин</b></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"><div class="sheet__p"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="js/data.js"></script><script src="js/core.js"></script><script src="js/pages.js"></script><script src="js/cabinets.js"></script>
+<script>A.start()</script>
+</body></html>
