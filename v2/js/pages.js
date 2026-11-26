@@ -22,7 +22,7 @@
         '<h1 class="h1">' + ln('Профессия') + ln('<em>мастера</em>', 90) + ln('маникюра', 180) + '</h1>' +
         '<p class="lead rv" style="--d:250ms">Мэй’Эйлин — ногтевая академия и нейл студия Алины Грубниковой. Онлайн-школа с куратором и проверкой заданий — и студия, где делают маникюр, которым любуются.</p>' +
         '<div class="hero__acts rv" style="--d:320ms"><a class="btn" href="#/akademiya">Выбрать курс <span class="ar">→</span></a><a class="btn btn--ghost" href="#/studiya">Записаться на маникюр</a></div>' +
-        '<ul class="stats4 rv" style="--d:400ms"><li><b data-n="50" data-s="+">0</b><span>выпускниц</span></li><li><b data-n="10">0</b><span>курсов</span></li><li><b data-n="5" data-s="+">0</b><span>лет практики</span></li><li><b>1:1</b><span>личный куратор</span></li></ul></div>' +
+        '<ul class="stats4 rv" style="--d:400ms"><li><b data-n="50" data-s="+">50+</b><span>выпускниц</span></li><li><b data-n="10">10</b><span>курсов</span></li><li><b data-n="5" data-s="+">5+</b><span>лет практики</span></li><li><b>1:1</b><span>личный куратор</span></li></ul></div>' +
         '<div class="collage rv" id="col" style="--d:200ms">' + ph('nails-wine', 'p1', 'Маникюр Алины') + ph('alina', 'p2', 'Алина Грубникова') + ph('nails-nude', 'p3', 'Френч') + '</div>' +
       '</div></section>' +
       '<div class="tline" aria-hidden="true"><span>Маникюр<i>✦</i>Педикюр<i>✦</i>Онлайн-школа<i>✦</i>Куратор<i>✦</i>Сертификат<i>✦</i>Маникюр<i>✦</i>Педикюр<i>✦</i>Онлайн-школа<i>✦</i>Куратор<i>✦</i>Сертификат<i>✦</i></span></div>' +
@@ -109,7 +109,7 @@
       '<p class="lead rv" style="margin-top:14px">Научу работать с абсолютно любыми ногтями, организовать рабочее место и делать маникюр, на который записываются в очередь.</p>' +
       '<p class="rv" style="font:italic 500 clamp(28px,3vw,40px)/1.2 var(--serif);margin-top:30px">«Я даю все знания, что у меня есть. В самом доступном для вас виде»</p></div>' +
       '<div class="collage rv" style="height:min(120vw,620px)">' + ph('alina', 'p1') + ph('nails-wine', 'p2') + ph('nails-black', 'p3') + '</div></div>' +
-      '<div class="wrap"><ul class="stats4"><li><b data-n="5" data-s="+">0</b><span>лет мастером</span></li><li><b data-n="50" data-s="+">0</b><span>выпускниц</span></li><li><b data-n="10">0</b><span>авторских курсов</span></li><li><b>1:1</b><span>обучение офлайн</span></li></ul></div></section>' +
+      '<div class="wrap"><ul class="stats4"><li><b data-n="5" data-s="+">5+</b><span>лет мастером</span></li><li><b data-n="50" data-s="+">50+</b><span>выпускниц</span></li><li><b data-n="10">10</b><span>авторских курсов</span></li><li><b>1:1</b><span>обучение офлайн</span></li></ul></div></section>' +
       '<section class="sec" style="padding-top:40px">' + marq() + '</section>';
   });
 

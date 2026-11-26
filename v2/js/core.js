@@ -193,7 +193,11 @@
     if (A.rm || !('IntersectionObserver' in window)) { root.querySelectorAll('.rv,.ln,.wipe').forEach(function (e) { e.classList.add('in'); }); return; }
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -6% 0px', threshold: .08 });
     root.querySelectorAll('.rv,.h1 .ln,.h2 .ln,.wipe').forEach(function (e) { io.observe(e); });
-    var cnt = new IntersectionObserver(function (es) { es.forEach(function (e) { if (!e.isIntersecting) return; var b = e.target, n = +b.dataset.n, t0 = performance.now(); (function st(t) { var k = Math.min(1, (t - t0) / 1500); b.textContent = Math.round(n * (1 - Math.pow(1 - k, 3))) + (k === 1 ? (b.dataset.s || '') : ''); if (k < 1) requestAnimationFrame(st); })(t0); cnt.unobserve(b); }); }, { threshold: .5 });
+    // счётчики: итоговое число уже стоит в разметке; «докрутка» — только украшение, и в конце всегда ставится точное число
+    var fin = function (b) { b.textContent = b.dataset.n + (b.dataset.s || ''); };
+    var cnt = new IntersectionObserver(function (es) { es.forEach(function (e) { if (!e.isIntersecting) return; var b = e.target, n = +b.dataset.n, t0 = performance.now(); cnt.unobserve(b);
+      setTimeout(function () { fin(b); }, 1800);
+      (function st(t) { var k = Math.min(1, Math.max(0, (t - t0) / 1500)); if (k >= 1) return fin(b); b.textContent = Math.round(n * (1 - Math.pow(1 - k, 3))); requestAnimationFrame(st); })(t0); }); }, { threshold: .4 });
     root.querySelectorAll('[data-n]').forEach(function (b) { cnt.observe(b); });
   };
   A.LOGO = '<span class="lgo"><span class="lgo__mk"><i class="msk lgo__e"></i><img src="../img/me-m.webp" alt="" width="814" height="544"></span><span class="lgo__w"><i class="msk lgo__n"></i><svg class="lgo__s" viewBox="0 0 1000 66" aria-hidden="true"><text x="500" y="52" text-anchor="middle" textLength="996" lengthAdjust="spacing" font-family="Onest,system-ui,sans-serif" font-weight="500" font-size="62" fill="currentColor">АКАДЕМИЯ &amp; НЕЙЛ СТУДИЯ</text></svg></span></span>';
