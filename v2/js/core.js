@@ -231,6 +231,12 @@
   A.toggleTheme = function () { A.setTheme(D.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); };
   A.start = function () {
     var th = D.getElementById('thm'); if (th) th.onclick = A.toggleTheme;
+    // тайная дверь в CRM: удерживать «©» в подвале ~1 секунду
+    var cp = D.getElementById('cpr'), ht = 0;
+    if (cp) { var stop = function () { clearTimeout(ht); cp.classList.remove('hold'); };
+      cp.addEventListener('pointerdown', function (e) { e.preventDefault(); cp.classList.add('hold'); ht = setTimeout(function () { cp.classList.remove('hold'); try { navigator.vibrate && navigator.vibrate(30); } catch (er) {} location.hash = '#/crm'; }, 900); });
+      ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { cp.addEventListener(ev, stop); });
+      cp.addEventListener('contextmenu', function (e) { e.preventDefault(); }); }
     try { if (!localStorage.getItem('as-ck')) { var ck = D.getElementById('ck'); ck.hidden = false; requestAnimationFrame(function () { ck.classList.add('on'); }); D.getElementById('ckok').onclick = function () { localStorage.setItem('as-ck', '1'); ck.classList.remove('on'); setTimeout(function () { ck.hidden = true; }, 500); }; } } catch (e) {}
     D.addEventListener('click', function (e) { if (e.target.closest('[data-theme-toggle]')) A.toggleTheme(); });
     if (D.documentElement.dataset.theme === 'dark') { var mt = D.querySelector('meta[name=theme-color]'); if (mt) mt.content = '#1E1D1F'; }

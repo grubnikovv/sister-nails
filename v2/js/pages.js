@@ -152,13 +152,12 @@
   /* ---------- вход ---------- */
   A.route('/vhod', function () {
     A.onScroll = null;
-    return '<section class="login"><div style="width:100%;max-width:900px"><h1 class="h2" style="text-align:center;margin-bottom:34px">' + ln('Вход') + ln('<em>в кабинет</em>', 90) + '</h1><div class="login__g">' +
+    return '<section class="login"><div style="width:100%;max-width:520px"><h1 class="h2" style="text-align:center;margin-bottom:34px">' + ln('Вход') + ln('<em>в кабинет</em>', 90) + '</h1><div class="login__g">' +
       '<div class="lcard rv"><span class="cap">Для учениц</span><h2>Личный <em>кабинет</em></h2><p>Уроки, домашние задания, связь с куратором и прогресс обучения.</p>' +
         '<div class="sso"><a class="sso__b vk" href="#/kabinet"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="7" fill="#0077FF"/><path d="M12.8 17c-5 0-7.8-3.4-7.9-9.1h2.5c.1 4.2 1.9 5.9 3.4 6.3V7.9h2.3v3.6c1.4-.2 2.9-1.8 3.4-3.6h2.3c-.4 2.2-2 3.8-3.2 4.5 1.2.6 3 2 3.7 4.6h-2.5c-.5-1.7-1.9-3-3.7-3.2V17h-.3z" fill="#fff"/></svg>Войти через VK ID</a>' +
         '<a class="sso__b ya" href="#/kabinet"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#FC3F1D"/><path d="M13.3 6.5h-1.1c-2 0-3.1 1-3.1 2.6 0 1.8.8 2.6 2.4 3.7l1.3.9-3.8 5.8H6.7l3.4-5.1C8.2 13 7 11.7 7 9.2c0-3 2.1-5 5.2-5h3v14.8h-1.9V6.5z" fill="#fff"/></svg>Войти через Яндекс ID</a>' +
         '<div class="sso__or"><span>или по почте</span></div><form class="sso__f" onsubmit="event.preventDefault();var v=this.querySelector(\'input\').value;if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(v)){A.toast(\'Введите почту, указанную при покупке\');return}A.toast(\'Ссылка для входа отправлена на \'+v+\' (демо)\');setTimeout(function(){location.hash=\'#/kabinet\'},900)"><input class="inp" type="email" inputmode="email" autocomplete="email" placeholder="Почта, указанная при покупке"><button class="btn">Получить ссылку для входа <span class="ar">→</span></button></form></div>' +
         '<p class="muted" style="margin-top:14px;font-size:12.5px">Доступ к курсу приходит на почту после оплаты. VK ID или Яндекс ID можно привязать в кабинете для быстрого входа.</p></div>' +
-      '<a class="lcard d rv" style="--d:100ms" href="#/crm"><span class="cap" style="color:rgba(244,238,242,.6)">Для Алины</span><h2>CRM <em>куратора</em></h2><p>Заявки, ученицы, проверка заданий, сообщения, аналитика и выгрузка в таблицы.</p><span class="btn btn--pink">Войти <span class="ar">→</span></span></a>' +
       '</div><p class="demo-note">Демо-режим: вход без проверки, данные хранятся только в этом браузере. <button class="lnk" onclick="A.reset();A.toast(\'Демо сброшено\')">Сбросить демо</button></p></div></section>';
   });
 
