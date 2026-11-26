@@ -178,7 +178,18 @@
     var cnt = new IntersectionObserver(function (es) { es.forEach(function (e) { if (!e.isIntersecting) return; var b = e.target, n = +b.dataset.n, t0 = performance.now(); (function st(t) { var k = Math.min(1, (t - t0) / 1500); b.textContent = Math.round(n * (1 - Math.pow(1 - k, 3))) + (k === 1 ? (b.dataset.s || '') : ''); if (k < 1) requestAnimationFrame(st); })(t0); cnt.unobserve(b); }); }, { threshold: .5 });
     root.querySelectorAll('[data-n]').forEach(function (b) { cnt.observe(b); });
   };
+  A.LOGO = '<span class="lgo"><span class="lgo__mk"><i class="msk lgo__e"></i><img src="../img/me-m.webp" alt="" width="814" height="544"></span><span class="lgo__w"><i class="msk lgo__n"></i><i class="msk lgo__s"></i></span></span>';
+  A.setTheme = function (t) {
+    var R = D.documentElement; R.classList.add('theme-anim'); R.dataset.theme = t;
+    try { localStorage.setItem('as-theme', t); } catch (e) {}
+    var m = D.querySelector('meta[name=theme-color]'); if (m) m.content = t === 'dark' ? '#1E1D1F' : '#F0E9DF';
+    setTimeout(function () { R.classList.remove('theme-anim'); }, 600);
+  };
+  A.toggleTheme = function () { A.setTheme(D.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); };
   A.start = function () {
+    var th = D.getElementById('thm'); if (th) th.onclick = A.toggleTheme;
+    D.addEventListener('click', function (e) { if (e.target.closest('[data-theme-toggle]')) A.toggleTheme(); });
+    if (D.documentElement.dataset.theme === 'dark') { var mt = D.querySelector('meta[name=theme-color]'); if (mt) mt.content = '#1E1D1F'; }
     view = D.getElementById('view'); curtain = D.getElementById('curtain');
     A.typo(D.getElementById('foot')); A.typo(D.getElementById('mnav')); addEventListener('hashchange', render); render();
     var hdr = D.getElementById('hdr'), last = 0, tick = false;
