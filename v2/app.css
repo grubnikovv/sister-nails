@@ -744,3 +744,18 @@ body.app .fx-progress{display:none}
 /* тайный вход в CRM: долгое нажатие на © */
 .cpr{display:inline-block;padding:6px;margin:-6px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;transition:transform .3s var(--ease),color .3s}
 .cpr.hold{transform:scale(1.5);color:var(--lak)}
+
+/* ===== логотип v3: «М» гель-лаком + ЭЙ’ЭЙЛИН, подпись по центру под всем словом ===== */
+.lgo{display:inline-grid;grid-template-columns:auto;justify-items:stretch;gap:.14em;font-size:34px;line-height:1;color:inherit}
+.wm{display:flex;align-items:flex-end}
+.wm__m{height:1.15em;width:auto;flex:none;margin:0 0 -.14em -.02em}
+.wm__r{height:.62em;aspect-ratio:655/125;flex:none;--u:url(../img/me-rest.webp)}
+.lgo .lgo__s{display:block;width:100%;height:auto;margin-top:.12em;transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.hdr.solid .lgo .lgo__s{opacity:0;transform:translateY(-3px)}
+.hdr.solid .wm{transform:translateY(.22em);transition:transform .5s var(--ease)}
+.wm{transition:transform .5s var(--ease)}
+.side .lgo{font-size:30px}.abar .lgo{font-size:30px}
+@media(max-width:360px){.hdr .lgo{font-size:30px}.abar .lgo{font-size:27px}}
+.brand__m{width:62%;height:auto;transform:translate(2%,4%)}
+.lgo{display:inline-flex;flex-direction:column;align-items:stretch;width:max-content}
+.lgo .lgo__s{width:0;min-width:100%}

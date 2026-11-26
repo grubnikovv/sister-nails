@@ -5,7 +5,7 @@
 html,body{background:#fff!important;color:#0E1A33}
 .pd{max-width:none;font:400 10.5pt/1.6 var(--sans)}
 .pd__h{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:14px;border-bottom:1px solid #d9d2c8;margin-bottom:26px}
-.pd__h .lgo{font-size:40px;color:#0E1A33}
+.pd__h .lgo{font-size:30px;color:#0E1A33}
 .pd__h small{font-size:8.5pt;color:#6b6f7c;text-align:right;line-height:1.5}
 .pd h1{font:500 26pt/1.05 var(--serif);margin:0 0 6px}
 .pd .meta{color:#6b6f7c;font-size:9pt;margin-bottom:22px}
@@ -21,7 +21,7 @@ html,body{background:#fff!important;color:#0E1A33}
 <script src="../js/docs.js"></script>
 <script>
 var id=new URLSearchParams(location.search).get('id'),d=DOCS.filter(function(x){return x.id===id})[0],R=DOCS.filter(function(x){return x.id==='rekvizity'})[0];
-var LG='<span class="lgo"><span class="lgo__mk"><i class="msk lgo__e"></i><img src="../../img/me-m.webp" alt=""></span><span class="lgo__w"><i class="msk lgo__n"></i><svg class="lgo__s" viewBox="0 0 1000 66"><text x="500" y="52" text-anchor="middle" textLength="996" lengthAdjust="spacing" font-family="Onest,sans-serif" font-weight="500" font-size="62" fill="currentColor">АКАДЕМИЯ &amp; НЕЙЛ СТУДИЯ</text></svg></span></span>';
+var LG='<span class="lgo"><span class="wm"><img class="wm__m" src="../../img/me-mm.webp" alt="" width="545" height="542"><i class="msk wm__r"></i></span><svg class="lgo__s" viewBox="0 0 1000 66" aria-hidden="true"><text x="500" y="52" text-anchor="middle" textLength="996" lengthAdjust="spacing" font-family="Onest,system-ui,sans-serif" font-weight="500" font-size="62" fill="currentColor">АКАДЕМИЯ &amp; НЕЙЛ СТУДИЯ</text></svg></span>';
 document.title=d.t;
 document.getElementById('pd').innerHTML='<div class="pd__h">'+LG+'<small>ИП Грубникова Алина Сергеевна<br>ИНН 345600043182 · ОГРНИП 325344300003940<br>academy.nail@mail.ru · +7 (936) 287-22-01</small></div><h1>'+d.t+'</h1><div class="meta">Редакция от '+d.date+' · сайт academy-nail.ru</div>'+
  d.s.map(function(x){return (x.h?'<h2>'+x.h+'</h2>':'')+x.html.replace(/href="#\/dokumenty\/(\w+)"/g,'href="https://academy-nail.ru/#/dokumenty/$1"')}).join('')+(d.req?'<div class="pd__r"><h2 style="margin-top:0">Реквизиты исполнителя</h2>'+R.s[0].html+'</div>':'');

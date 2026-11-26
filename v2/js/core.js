@@ -200,7 +200,7 @@
       (function st(t) { var k = Math.min(1, Math.max(0, (t - t0) / 1500)); if (k >= 1) return fin(b); b.textContent = Math.round(n * (1 - Math.pow(1 - k, 3))); requestAnimationFrame(st); })(t0); }); }, { threshold: .4 });
     root.querySelectorAll('[data-n]').forEach(function (b) { cnt.observe(b); });
   };
-  A.LOGO = '<span class="lgo"><span class="lgo__mk"><i class="msk lgo__e"></i><img src="../img/me-m.webp" alt="" width="814" height="544"></span><span class="lgo__w"><i class="msk lgo__n"></i><svg class="lgo__s" viewBox="0 0 1000 66" aria-hidden="true"><text x="500" y="52" text-anchor="middle" textLength="996" lengthAdjust="spacing" font-family="Onest,system-ui,sans-serif" font-weight="500" font-size="62" fill="currentColor">АКАДЕМИЯ &amp; НЕЙЛ СТУДИЯ</text></svg></span></span>';
+  A.LOGO = '<span class="lgo"><span class="wm"><img class="wm__m" src="../img/me-mm.webp" alt="" width="545" height="542"><i class="msk wm__r"></i></span><svg class="lgo__s" viewBox="0 0 1000 66" aria-hidden="true"><text x="500" y="52" text-anchor="middle" textLength="996" lengthAdjust="spacing" font-family="Onest,system-ui,sans-serif" font-weight="500" font-size="62" fill="currentColor">АКАДЕМИЯ &amp; НЕЙЛ СТУДИЯ</text></svg></span>';
   A.setTheme = function (t) {
     var R = D.documentElement; R.classList.add('theme-anim'); R.dataset.theme = t;
     try { localStorage.setItem('as-theme', t); } catch (e) {}
