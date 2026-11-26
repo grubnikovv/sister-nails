@@ -7,7 +7,7 @@
 
 :root{
   --grey:#F0E9DF;--grey2:#E8E2DA;--white:#FBF8F4;--powder:#F2DDE3;--pink:#FFBEED;--pink2:#FBE6F3;--fu:#C8006A;--navy:#0E1A33;--navy2:#16223E;--wine:#3E0A20;
-  --grain:url(../img/grain-a.webp);--card:#FBF8F4;--chip:rgba(14,26,51,.06);--line2:#CFC7BC;--ink:#0E1A33;--ink2:#545C70;--ink3:#8A90A0;--line:rgba(14,26,51,.12);
+  --grain:url(../img/grain-a.webp);--card:#FBF8F4;--chip:rgba(14,26,51,.06);--line2:#CFC7BC;--ink:#0E1A33;--ink2:#4D5468;--ink3:#6C7183;--line:rgba(14,26,51,.12);
   --ok:#1E8A55;--okbg:#DDF3E6;--wait:#8A5A00;--waitbg:#FFF1D6;--bad:#B3123A;--badbg:#FFE1E6;
   --serif:Cormorant,'Cormorant Garamond',Georgia,serif;--sans:Onest,system-ui,-apple-system,'Segoe UI',sans-serif;
   --pad:clamp(18px,4.5vw,64px);--ease:cubic-bezier(.22,1,.36,1);--r:22px;
