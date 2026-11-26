@@ -178,7 +178,7 @@
             if (!p.querySelector('#pc').checked) { A.toast('Нужно согласие с офертой и на обработку данных'); return; }
             var name = p.querySelector('#pn').value || 'Новая ученица', sum = c.f === 'online' ? c.p : Math.round(c.p / 3);
             A.S.leads.unshift({ id: 'l' + Date.now(), name: name, phone: '', email: em, stage: c.f === 'online' ? 'study' : 'pay', course: c.id, src: 'Сайт', sum: c.p, note: c.f === 'online' ? 'Оплатила онлайн' : 'Внесла предоплату', at: Date.now(), hist: [{ t: Date.now(), x: 'Покупка на сайте: ' + A.rub(sum) }] });
-            A.S.pay.push({ t: Date.now(), sum: sum }); A.save(); A.closeSheet(); A.toast(c.f === 'online' ? 'Оплачено (демо) — доступ в личном кабинете' : 'Предоплата получена (демо) — Алина свяжется');
+            A.S.pay.push({ t: Date.now(), sum: sum }); A.save(); A.closeSheet(); A.burst(); A.toast(c.f === 'online' ? 'Оплачено (демо) — доступ в личном кабинете' : 'Предоплата получена (демо) — Алина свяжется');
           };
         }); }
   });

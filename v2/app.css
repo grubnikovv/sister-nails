@@ -688,3 +688,55 @@ body.app .ck{bottom:calc(96px + env(safe-area-inset-bottom))!important}
 .mnav a[aria-current]:not(.btn){color:var(--lak);font-style:italic}
 .nav a[aria-current]{color:var(--lak)}
 :root[data-theme=dark]{--lak:#F0469B}
+.brand__sq .lgo__mk{transform:translateX(2%)}
+
+/* ===== живые анимации ===== */
+/* капля лака в точке касания */
+.fx-drop{position:fixed;z-index:600;width:0;height:0;pointer-events:none}
+.fx-drop::before{content:"";position:absolute;left:-18px;top:-18px;width:36px;height:36px;border-radius:50%;border:2px solid var(--lak);animation:fxring .6s var(--ease) forwards}
+.fx-drop::after{content:"";position:absolute;left:-5px;top:-5px;width:10px;height:10px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(circle at 35% 30%,#fff 0 18%,var(--lak) 22%);animation:fxdot .55s var(--ease) forwards}
+.fx-drop i{position:absolute;left:-2.5px;top:-2.5px;width:5px;height:5px;border-radius:50%;background:var(--lak);animation:fxsp .55s var(--ease) forwards}
+@keyframes fxring{from{transform:scale(.2);opacity:.9}to{transform:scale(1.6);opacity:0}}
+@keyframes fxdot{0%{transform:scale(.4)}40%{transform:scale(1.25)}100%{transform:scale(0);opacity:0}}
+@keyframes fxsp{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(var(--x),var(--y)) scale(.2);opacity:0}}
+/* брызги при успехе */
+.fx-burst{position:fixed;z-index:600;width:0;height:0;pointer-events:none}
+.fx-burst i{position:absolute;left:-6px;top:-9px;width:12px;height:18px;border-radius:50% 50% 42% 42%/64% 64% 36% 36%;opacity:0;animation:fxb 1.2s cubic-bezier(.15,.7,.3,1) forwards}
+@keyframes fxb{0%{opacity:1;transform:translate(0,0) rotate(0) scale(calc(var(--s)*.3))}70%{opacity:1}100%{opacity:0;transform:translate(var(--x),calc(var(--y) + 90px)) rotate(var(--r)) scale(var(--s))}}
+/* прогресс прокрутки */
+.fx-progress{position:fixed;left:0;right:0;top:0;height:3px;z-index:90;background:linear-gradient(90deg,var(--pink),var(--lak));transform-origin:left;transform:scaleX(0);pointer-events:none}
+body.app .fx-progress{display:none}
+/* мазок лака под розовыми словами заголовков */
+.h1 em,.h2 em{position:relative;z-index:0}
+.h1 em::after,.h2 em::after{content:"";position:absolute;z-index:-1;left:-.06em;right:-.04em;bottom:.08em;height:.2em;border-radius:.2em .3em .1em .25em;background:linear-gradient(90deg,color-mix(in srgb,var(--pink) 75%,transparent),color-mix(in srgb,var(--lak) 35%,transparent));transform:scaleX(0) skewX(-12deg);transform-origin:left;transition:transform .9s var(--ease) calc(var(--d,0ms) + .45s)}
+.in .h1 em::after,.in .h2 em::after,.ln.in em::after,.h1 .in em::after,.h2 .in em::after{transform:scaleX(1) skewX(-12deg)}
+.dark .h2 em::after,.stk:nth-child(3) .h2 em::after,.wine .h2 em::after,.foot em::after{opacity:.35}
+/* бегущие ленты наклоняются от скорости прокрутки */
+.marq__t,.tline span{transition:none}
+.marq,.tline{transform:skewX(calc(var(--sk,0deg) * -1));transition:transform .3s var(--ease)}
+/* фото «наезжают» при прокрутке (где браузер умеет scroll-driven анимации) */
+@supports (animation-timeline: view()){
+  .stk .ph img,.chero__img,.cc .ph{animation:fxin linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
+  @keyframes fxin{from{transform:scale(1.14) translateY(5%);opacity:.4}to{transform:none;opacity:1}}
+}
+/* ПК: курсор-капля */
+.fx-cur{position:fixed;inset:0;z-index:650;pointer-events:none}
+.fx-cur i,.fx-cur b{position:fixed;left:0;top:0;border-radius:50%}
+.fx-cur i{width:8px;height:8px;margin:-4px 0 0 -4px;background:var(--lak)}
+.fx-cur b{width:34px;height:34px;margin:-17px 0 0 -17px;border:1.5px solid color-mix(in srgb,var(--lak) 60%,transparent);transition:width .3s var(--ease),height .3s var(--ease),margin .3s var(--ease),background-color .3s}
+.fx-cur.hot b{width:58px;height:58px;margin:-29px 0 0 -29px;background:color-mix(in srgb,var(--pink) 22%,transparent)}
+.fx-cur.down b{width:24px;height:24px;margin:-12px 0 0 -12px}
+@media (hover:hover) and (pointer:fine){html{cursor:auto}}
+/* ПК: магнитные кнопки и наклон карточек с бликом */
+.btn{transition:color .45s var(--ease),transform .4s var(--ease),translate .35s var(--ease)}
+.fx-tilt{transition:transform .25s ease-out!important;will-change:transform}
+.cc,.lcard,.dcard,.kpi,.svc button{transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
+.fx-tilt::before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:inherit;background:radial-gradient(circle at var(--gx) var(--gy),rgba(255,255,255,.28),transparent 45%)}
+.cc,.lcard,.dcard,.kpi{position:relative}
+/* смена темы — круговое раскрытие */
+.vt-theme::view-transition-old(root),.vt-theme::view-transition-new(root){animation:none;mix-blend-mode:normal}
+.vt-theme::view-transition-new(root){animation:vtc .7s var(--ease)}
+@keyframes vtc{from{clip-path:circle(0 at var(--vx) var(--vy))}to{clip-path:circle(150% at var(--vx) var(--vy))}}
+/* нажатие — мягкий «пружинный» отклик */
+.les button:active:not(:disabled),.tcs button:active,.file:active,.sso__b:active,.opts button:active{transform:scale(.98)}
+@media (prefers-reduced-motion:reduce){.fx-progress,.fx-cur{display:none}.h1 em::after,.h2 em::after{transform:scaleX(1) skewX(-12deg)}}

@@ -93,13 +93,13 @@
         var pb = v.querySelector('#plb'); pb.onclick = function () { v.querySelector('#pl').classList.add('is-on'); A.toast('Здесь будет видео урока — защищённое от скачивания'); };
         v.querySelectorAll('[data-tc]').forEach(function (b) { b.onclick = function () { v.querySelector('#pl').scrollIntoView({ behavior: 'smooth', block: 'center' }); A.toast('Видео перемотается на ' + b.dataset.tc); }; });
         var f = v.querySelector('#hwF'); if (f) f.onchange = function () { [].slice.call(f.files, 0, 4 - tmp.length).forEach(function (file) { A.compress(file, 1280, function (u) { tmp.push(u); v.querySelector('#hwP').innerHTML = tmp.map(function (s) { return '<img src="' + s + '" alt="">'; }).join(''); }); }); };
-        var s = v.querySelector('#hwS'); if (s) s.onclick = function () { var t = v.querySelector('#hwT').value.trim(); if (!t && !tmp.length) { A.toast('Добавьте фото или напишите ответ'); return; } S().prog[i] = { st: 'sent', text: t, photos: tmp, at: Date.now() }; A.save(); A.toast('Отправлено Алине на проверку'); A.rerender(); };
+        var s = v.querySelector('#hwS'); if (s) s.onclick = function () { var t = v.querySelector('#hwT').value.trim(); if (!t && !tmp.length) { A.toast('Добавьте фото или напишите ответ'); return; } S().prog[i] = { st: 'sent', text: t, photos: tmp, at: Date.now() }; A.save(); A.burstAt(s); A.toast('Отправлено Алине на проверку'); A.rerender(); };
         var qz = v.querySelector('#qz'); if (qz) qz.onsubmit = function (e) { e.preventDefault(); var miss = 0, sc = 0;
           l.quiz.forEach(function (q, qi) { var ch = qz.querySelector('input[name=q' + qi + ']:checked'); var fs = qz.querySelectorAll('fieldset')[qi]; fs.classList.remove('ok', 'bad'); if (!ch) { miss++; return; } var ok = +ch.value === q.ok; if (ok) sc++; fs.classList.add(ok ? 'ok' : 'bad'); });
           if (miss) { A.toast('Ответьте на все вопросы'); return; }
-          if (sc >= Math.ceil(l.quiz.length * 2 / 3)) { S().prog[i] = { st: 'passed', score: sc, at: Date.now() }; A.save(); A.toast('Тест пройден: ' + sc + ' из ' + l.quiz.length + ' — следующий урок открыт'); setTimeout(A.rerender, 900); }
+          if (sc >= Math.ceil(l.quiz.length * 2 / 3)) { S().prog[i] = { st: 'passed', score: sc, at: Date.now() }; A.save(); A.burstAt(qz.querySelector('.btn')); A.toast('Тест пройден: ' + sc + ' из ' + l.quiz.length + ' — следующий урок открыт'); setTimeout(A.rerender, 900); }
           else A.toast('Верно ' + sc + ' из ' + l.quiz.length + ' — пересмотрите урок и попробуйте ещё раз'); };
-        var d = v.querySelector('#lesD'); if (d) d.onclick = function () { S().prog[i] = { st: 'done', at: Date.now() }; A.save(); A.toast('Урок изучен — следующий открыт'); A.rerender(); };
+        var d = v.querySelector('#lesD'); if (d) d.onclick = function () { S().prog[i] = { st: 'done', at: Date.now() }; A.burstAt(d); A.save(); A.toast('Урок изучен — следующий открыт'); A.rerender(); };
       } };
     } else if (sub === 'chat') {
       S().seen.s = Date.now(); A.save(); body = chat('s');
@@ -165,7 +165,7 @@
         v.addEventListener('click', function (e) { var b = e.target.closest('[data-ok],[data-back]'); if (!b) return; var k = +(b.dataset.ok || b.dataset.back), it = q[k], ok = !!b.dataset.ok, cm = v.querySelector('#cm' + k).value.trim();
           if (!ok && !cm) { A.toast('Напишите, что исправить'); return; }
           if (it.me) { it.p.st = ok ? 'ok' : 'back'; it.p.comment = cm || 'Отличная работа! Следующий урок открыт.'; } else { it.o.hw = null; if (ok) it.o.done++; }
-          A.save(); A.toast(ok ? 'Принято — у ученицы открылся следующий урок' : 'Возвращено с комментарием'); A.rerender(); });
+          A.save(); if (ok) A.burstAt(b); A.toast(ok ? 'Принято — у ученицы открылся следующий урок' : 'Возвращено с комментарием'); A.rerender(); });
       } };
     } else if (sub === 'kursy') {
       var cid = arg[1] || 'mani', cc = A.course(cid) || A.course('mani'), CL = A.lessons(cc), MM = A.modules(cc);
