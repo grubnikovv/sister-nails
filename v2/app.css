@@ -13,7 +13,7 @@
   --pad:clamp(18px,4.5vw,64px);--ease:cubic-bezier(.22,1,.36,1);--r:22px;
 }
 *{box-sizing:border-box}
-html{overflow-x:clip;-webkit-text-size-adjust:100%}
+html{overflow-x:clip;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
 body{margin:0;color:var(--ink);background:var(--grey);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;hyphens:manual;transition:background-color 1s var(--ease)}
 body.app{background:var(--grey2)}
 img{display:block;max-width:100%}
@@ -759,3 +759,12 @@ body.app .fx-progress{display:none}
 .brand__m{width:62%;height:auto;transform:translate(2%,4%)}
 .lgo{display:inline-flex;flex-direction:column;align-items:stretch;width:max-content}
 .lgo .lgo__s{width:0;min-width:100%}
+.hdr .logo{max-height:64px;overflow:visible}
+
+/* шапка при прокрутке: плотный фон, подпись плавно сворачивается */
+.hdr.solid{background:var(--grey)!important;box-shadow:0 1px 0 var(--line),0 10px 30px -22px rgba(0,0,0,.45)}
+.hdr .lgo .lgo__s{max-height:.3em;opacity:1;transform:none;transition:max-height .45s var(--ease),opacity .3s var(--ease),margin .45s var(--ease)}
+.hdr.solid .lgo .lgo__s{max-height:0;opacity:0;margin-top:0;transform:none}
+.hdr.solid .wm{transform:none}
+body.menu .hdr{box-shadow:none}
+.hdr{transition:transform .6s var(--ease),background-color .15s linear,box-shadow .3s}
