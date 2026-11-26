@@ -783,3 +783,6 @@ body.menu .hdr{background:transparent!important;box-shadow:none}
 .side .lgo,.abar .lgo{font-size:28px}
 @media(max-width:360px){.hdr .lgo{font-size:28px}.abar .lgo{font-size:25px}}
 .lgo .lgo__s{margin-top:.1em}
+
+.wm--d{display:none!important}:root[data-theme=dark] .wm--l{display:none!important}:root[data-theme=dark] .wm--d{display:block!important}
+.side .wm--l{display:none!important}.side .wm--d{display:block!important}
