@@ -2,17 +2,18 @@
 (function () {
   var A = window.A, E = A.esc, D = document;
   function ph(name, cls, alt, w) { return '<div class="ph ' + (cls || '') + '"><img src="' + A.img(name, w || 960) + '" srcset="' + A.img(name, 480) + ' 480w, ' + A.img(name, 960) + ' 960w" sizes="(max-width: 700px) 92vw, 640px" data-full="' + A.img(name, 960) + '" alt="' + E(alt || '') + '" loading="lazy" decoding="async"></div>'; }
+  function phU(u, cls) { return u ? '<div class="ph ' + (cls || '') + '"><img src="' + u + '" data-full="' + u + '" alt="" loading="lazy" decoding="async"></div>' : '<div class="ph ph--empty ' + (cls || '') + '"><span>Фото появится здесь</span></div>'; }
   function ln(t, d) { return '<span class="ln"><span' + (d ? ' style="--d:' + d + 'ms"' : '') + '>' + t + '</span></span>'; }
-  function lessonsCount(c) { return c.g.reduce(function (s, g) { return s + g[1].length; }, 0); }
+  function lessonsCount(c) { return A.lessons(c).length; }
   function card(c, i) {
     var n = lessonsCount(c);
     return '<a class="cc rv" style="--d:' + (i % 3) * 80 + 'ms" href="#/kurs/' + c.id + '">' +
-      '<div class="ph"><img src="' + A.img(A.COVER[c.id], 480) + '" alt="" loading="lazy"><span class="cc__flag">' + (c.f === 'online' ? 'Онлайн' : 'Офлайн') + '</span>' + (c.best ? '<span class="cc__flag f">Выгодно</span>' : '') + '</div>' +
-      '<div class="cc__b"><div class="cc__m"><span>' + E(c.lv) + '</span>' + (n ? '<span>' + n + ' уроков</span>' : '') + '<span>' + E(c.facts[0]) + '</span></div>' +
+      '<div class="ph' + (A.cover(c, 480) ? '' : ' ph--empty') + '">' + (A.cover(c, 480) ? '<img src="' + A.cover(c, 480) + '" alt="" loading="lazy">' : '<span>Обложка курса</span>') + '<span class="cc__flag">' + (c.f === 'online' ? 'Онлайн' : 'Офлайн') + '</span>' + (c.best ? '<span class="cc__flag f">Выгодно</span>' : '') + '</div>' +
+      '<div class="cc__b"><div class="cc__m"><span>' + E(c.lv) + '</span>' + (n ? '<span>' + A.plural(n, 'урок', 'урока', 'уроков') + '</span>' : '') + ((c.facts || [])[0] ? '<span>' + E(c.facts[0]) + '</span>' : '') + '</div>' +
       '<h3>' + E(c.t) + '</h3><p>' + E(c.d) + '</p>' +
       '<div class="cc__f"><div class="cc__p">' + A.rub(c.p) + (c.old ? '<s>' + A.rub(c.old) + ' по отдельности</s>' : '') + '</div><span class="btn btn--sm">Подробнее <span class="ar">→</span></span></div></div></a>';
   }
-  var marq = function () { var a = ['nails-wine', 'nails-nude', 'pedicure-blue', 'nails-black', 'nails-milk', 'alina']; var h = a.concat(a).map(function (x) { return ph(x, '', '', 480); }).join(''); return '<div class="marq" aria-hidden="true"><div class="marq__t">' + h + '</div></div>'; };
+  var marq = function () { var w = A.works(); var a = ['nails-wine', 'nails-nude', 'pedicure-blue', 'nails-black', 'nails-milk', 'alina']; var one = w && w.length ? w.map(function (u) { return phU(u); }) : a.map(function (x) { return ph(x, '', '', 480); }); while (one.length < 6) one = one.concat(one); var h = one.concat(one).join(''); return '<div class="marq" aria-hidden="true"><div class="marq__t">' + h + '</div></div>'; };
 
   /* ---------- главная ---------- */
   A.route('/', function () {
@@ -32,8 +33,8 @@
           '<article class="stk" style="--i:1"><div><div class="stk__n">02</div><h3 class="h2" style="font-size:clamp(38px,4.4vw,70px);margin-top:20px">Проверка <em>каждой работы</em></h3><p class="lead" style="margin-top:16px">Загружаете фото — получаете разбор: что получилось, что исправить. Как личное обучение, только онлайн.</p><div class="pills"><span>Фото-задания</span><span>Комментарии</span><span>Чат с куратором</span></div></div>' + ph('nails-black', 'wipe', '') + '</article>' +
           '<article class="stk" style="--i:2"><div><div class="stk__n">03</div><h3 class="h2" style="font-size:clamp(38px,4.4vw,70px);margin-top:20px">Сертификат <em>и поддержка</em></h3><p class="lead" style="margin-top:16px;color:rgba(244,238,242,.75)">Именной сертификат с печатью и помощь Алины после курса — чтобы уверенно начать работать.</p><div class="pills"><span>С печатью</span><span>Бумажный по желанию</span><span>Поддержка</span></div></div>' + ph('pedicure-blue', 'wipe', '') + '</article>' +
         '</div></div></section>' +
-      '<section class="sec dark"><div class="wrap"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:10px"><div><span class="cap rv">Популярные курсы</span><h2 class="h2" style="margin-top:16px">' + ln('Начните') + ln('<em>с этих</em>', 90) + '</h2></div><a class="btn btn--pink rv" href="#/akademiya">Все 10 курсов <span class="ar">→</span></a></div>' +
-        '<div class="cgrid">' + ['duo', 'mani', 'mani-off'].map(function (id, i) { return card(A.course(id), i); }).join('') + '</div></div></section>' +
+      '<section class="sec dark"><div class="wrap"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:10px"><div><span class="cap rv">Популярные курсы</span><h2 class="h2" style="margin-top:16px">' + ln('Начните') + ln('<em>с этих</em>', 90) + '</h2></div><a class="btn btn--pink rv" href="#/akademiya">Все курсы <span class="ar">→</span></a></div>' +
+        '<div class="cgrid">' + (function () { var p = ['duo', 'mani', 'mani-off'].map(A.course).filter(function (c) { return c && !c.hid; }); if (p.length < 3) p = p.concat(A.pub().filter(function (c) { return p.indexOf(c) < 0; })).slice(0, 3); return p; })().map(function (c, i) { return card(c, i); }).join('') + '</div></div></section>' +
       '<section class="sec" style="padding-bottom:60px"><div class="wrap" style="margin-bottom:40px"><span class="cap rv">Портфолио</span><h2 class="h2" style="margin-top:16px">' + ln('Работы') + ln('<em>Алины</em>', 90) + '</h2></div>' + marq() + '</section>' +
       '<section class="sec powder"><div class="wrap" style="display:grid;gap:40px;align-items:center;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))">' +
         '<div><span class="cap rv">Нейл студия Мэй’Эйлин · Москва</span><h2 class="h2" style="margin:16px 0 24px">' + ln('Маникюр') + ln('<em>за 30 секунд</em>', 90) + '</h2><p class="lead rv">Выберите услугу, день и свободное окно — запись подтвердится в DIKIDI, напомним накануне.</p><div class="hero__acts rv" style="margin-top:30px"><button class="btn" data-book>Записаться онлайн <span class="ar">→</span></button><a class="lnk" href="#/studiya">Услуги и цены</a></div></div>' +
@@ -51,7 +52,7 @@
       '<section class="khero"><div class="wrap"><span class="cap rv">Ногтевая академия Мэй’Эйлин</span><h1 class="h1" style="margin:18px 0 26px">' + ln('Курсы') + ln('<em>академии</em>', 90) + '</h1>' +
         '<p class="lead rv">Онлайн — видеоуроки в личном кабинете, задания с проверкой и куратор. Офлайн — индивидуально, лично с Алиной.</p>' +
         '<div class="ftabs rv" data-pick id="ft" style="margin-top:34px"><button aria-pressed="true" data-v="all">Все курсы</button><button aria-pressed="false" data-v="start">С нуля</button><button aria-pressed="false" data-v="pro">Для мастеров</button><button aria-pressed="false" data-v="online">Онлайн</button><button aria-pressed="false" data-v="offline">Офлайн</button></div>' +
-        '<div class="cgrid" id="cg">' + COURSES.map(card).join('') + '</div></div></section>' +
+        '<div class="cgrid" id="cg">' + A.pub().map(card).join('') + '</div></div></section>' +
       '<section class="sec dark"><div class="wrap"><span class="cap rv">Как проходит онлайн-обучение</span><h2 class="h2" style="margin:16px 0 40px">' + ln('Учёба') + ln('<em>в личном кабинете</em>', 90) + '</h2>' +
         '<div class="g3">' + [['01', 'Оплата на сайте', 'Картой или СБП, чек на почту — доступ открывается сразу'], ['02', 'Видеоуроки', 'Смотрите с телефона, в своём темпе'], ['03', 'Домашние задания', 'Фото работы — проверка и комментарий Алины'], ['04', 'Сертификат', 'Именной, с печатью, после финального задания']].map(function (s, i) { return '<div class="kpi rv" style="--d:' + i * 80 + 'ms;background:rgba(255,255,255,.06);color:#F4EEF2"><b style="color:var(--pink)">' + s[0] + '</b><div style="font:500 24px/1.1 var(--serif);margin:14px 0 8px">' + s[1] + '</div><span style="color:rgba(244,238,242,.7)">' + s[2] + '</span></div>'; }).join('') + '</div>' +
         '<div class="hero__acts rv" style="margin-top:40px"><a class="btn btn--pink" href="#/kabinet">Посмотреть кабинет ученицы <span class="ar">→</span></a></div></div></section>',
@@ -73,23 +74,24 @@
     var c = A.course(arg[0]) || COURSES[0], les = A.lessons(c), n = les.length, mods = [], titles = [];
     A.modules(c).forEach(function (md) { titles.push(E(md.t)); mods.push(les.filter(function (l) { return l.mt === md.t; })); });
     var parts = c.t.split(' '), last = parts.pop();
-    var rel = COURSES.filter(function (x) { return x.id !== c.id && x.f === c.f; }).slice(0, 3);
+    var rel = A.pub().filter(function (x) { return x.id !== c.id && x.f === c.f; }).slice(0, 3);
     return { html:
       '<section class="khero"><div class="wrap khero__g"><div><a class="lnk rv" href="#/akademiya">← Все курсы</a><div class="rv" style="margin-top:26px"><span class="cap">' + (c.f === 'online' ? 'Онлайн-курс' : 'Офлайн · лично с Алиной') + ' · ' + E(c.lv) + '</span></div>' +
         '<h1 class="h1" style="margin:16px 0 22px;font-size:clamp(52px,8vw,128px)">' + ln(E(parts.join(' '))) + ln('<em>' + E(last) + '</em>', 90) + '</h1><p class="lead rv">' + E(c.d) + '</p>' +
         '<div class="hero__acts rv" style="margin-top:30px"><button class="btn" data-buy="' + c.id + '">' + (c.f === 'online' ? 'Купить курс' : 'Записаться') + ' · ' + A.rub(c.p) + '</button><a class="lnk" href="#prog">Программа</a></div></div>' +
-        '<div class="collage rv" style="height:min(110vw,560px)">' + ph(A.COVER[c.id], 'p1') + ph('alina', 'p2') + ph(c.f === 'online' ? 'nails-milk' : 'nails-black', 'p3') + '</div></div>' +
+        '<div class="collage rv" style="height:min(110vw,560px)">' + phU(A.cover(c), 'p1') + ph('alina', 'p2') + ph(c.f === 'online' ? 'nails-milk' : 'nails-black', 'p3') + '</div></div>' +
         '<div class="wrap"><ul class="kf"><li class="rv"><b>' + (c.f === 'online' ? 'Онлайн' : 'Офлайн') + '</b><span>формат</span></li><li class="rv" style="--d:80ms"><b>' + (n || '—') + '</b><span>уроков</span></li><li class="rv" style="--d:160ms"><b>' + E(c.facts[0]) + '</b><span>' + (c.f === 'online' ? 'доступ' : 'длительность') + '</span></li><li class="rv" style="--d:240ms"><b>Есть</b><span>сертификат с печатью</span></li></ul></div></section>' +
       '<section class="sec powder" id="prog" style="padding-top:90px"><div class="wrap"><span class="cap rv">Программа</span><h2 class="h2" style="margin:16px 0 40px">' + ln('Что') + ln('<em>вы освоите</em>', 90) + '</h2>' +
         (mods.length ? '<div class="mods">' + mods.map(function (m, k) { return '<details class="rv"' + (k === 0 ? ' open' : '') + '><summary><i>' + String(k + 1).padStart(2, '0') + '</i><b>' + titles[Math.min(k, titles.length - 1)] + '</b><span>' + A.plural(m.length, 'урок', 'урока', 'уроков') + '</span></summary><ol>' + m.map(function (l, j) { return '<li><small>' + String(les.indexOf(l) + 1).padStart(2, '0') + '</small>' + E(l.t) + (l.hw ? '<span class="tag pink">задание</span>' : '<small>' + l.m + ' мин</small>') + '</li>'; }).join('') + '</ol></details>'; }).join('') + '</div>' : '<p class="lead">Подробная программа скоро появится — напишите Алине, она расскажет лично.</p>') +
         (c.terms.length ? '<h3 class="h3" style="margin:50px 0 16px">Условия</h3><div class="pills">' + c.terms.map(function (t) { return '<span style="background:var(--card)">' + E(t) + '</span>'; }).join('') + '</div>' : '') +
         '<div class="buybar"><div><b>' + A.rub(c.p) + '</b>' + (c.old ? '<s>' + A.rub(c.old) + '</s>' : '') + '<div style="font-size:12px;opacity:.65">' + (c.f === 'online' ? 'Карта или СБП · доступ сразу' : 'Предоплата бронирует даты') + '</div></div><button class="btn btn--pink" data-buy="' + c.id + '">' + (c.f === 'online' ? 'Купить курс' : 'Записаться') + ' <span class="ar">→</span></button></div></div></section>' +
+      '<section class="sec" style="padding-bottom:20px"><div class="wrap"><span class="cap rv">Работы учениц</span><h2 class="h2" style="margin:16px 0 34px">' + ln('Результаты') + ln('<em>курса</em>', 90) + '</h2><div class="kgal">' + (function () { var g = A.gal(c.id), o = ''; for (var k = 0; k < 6; k++) o += phU(g[k], 'rv'); return o; })() + '</div></div></section>' +
       '<section class="sec"><div class="wrap"><span class="cap rv">Похожие курсы</span><div class="cgrid">' + rel.map(card).join('') + '</div></div></section>' };
   });
 
   /* ---------- студия ---------- */
-  var SVC = [['Маникюр без покрытия', '1 ч', 1800, '#EEDCD5'], ['Маникюр с гель-лаком', '2 ч', 3000, '#6E0D25'], ['Укрепление гелем и гель-лак', '2 ч 30 мин', 3500, '#F1ECE6'], ['Наращивание', '3 ч', 4500, '#E5B7C8'], ['Коррекция наращивания', '2 ч 30 мин', 4000, '#C99BAA'], ['Педикюр с гель-лаком', '1 ч 30 мин', 3300, '#1D33A8'], ['Полный педикюр', '2 ч', 4200, '#121218'], ['Френч', 'к покрытию', 500, '#FBF8F4']];
-  A.SVC = SVC;
+  var SVC = [['Маникюр без покрытия', '1 ч', 1800, '#EEDCD5'], ['Маникюр с гель-лаком', '2 ч', 3000, '#6E0D25'], ['Укрепление гелем и гель-лак', '2 ч 30 мин', 3500, '#F1ECE6'], ['Наращивание', '3 ч', 4500, '#E5B7C8', 'от '], ['Коррекция наращивания', '2 ч 30 мин', 4000, '#C99BAA'], ['Педикюр с гель-лаком', '1 ч 30 мин', 3300, '#1D33A8'], ['Полный педикюр', '2 ч', 4200, '#121218'], ['Френч', 'к покрытию', 500, '#FBF8F4', '+']];
+  if (A.CMS.svc) SVC = A.CMS.svc; A.SVC = SVC;
   A.route('/studiya', function () {
     A.onScroll = null;
     return { html:
@@ -97,7 +99,7 @@
         '<div class="hero__acts rv" style="margin-top:30px"><button class="btn" data-book>Записаться онлайн <span class="ar">→</span></button></div></div>' +
         '<div class="collage rv" style="height:min(110vw,560px)">' + ph('nails-black', 'p1') + ph('nails-wine', 'p2') + ph('nails-nude', 'p3') + '</div></div></section>' +
       '<section class="sec powder" style="padding-top:80px"><div class="wrap"><span class="cap rv">Услуги и цены</span><h2 class="h2" style="margin:16px 0 36px">' + ln('Выберите') + ln('<em>свой оттенок</em>', 90) + '</h2>' +
-        '<div class="svc">' + SVC.map(function (s, i) { return '<button class="rv" style="--d:' + i * 50 + 'ms" data-book="' + i + '"><i class="nl" style="--c:' + s[3] + '"></i><span><b>' + E(s[0]) + '</b><small>' + E(s[1]) + '</small></span><em>' + (i === 7 ? '+' : (i === 3 ? 'от ' : '')) + A.rub(s[2]) + '</em></button>'; }).join('') + '</div></div></section>' +
+        '<div class="svc">' + SVC.map(function (s, i) { return '<button class="rv" style="--d:' + i * 50 + 'ms" data-book="' + i + '"><i class="nl" style="--c:' + s[3] + '"></i><span><b>' + E(s[0]) + '</b><small>' + E(s[1]) + '</small></span><em>' + (s[4] || '') + A.rub(s[2]) + '</em></button>'; }).join('') + '</div></div></section>' +
       '<section class="sec" style="padding-bottom:60px"><div class="wrap" style="margin-bottom:40px"><span class="cap rv">Портфолио</span><h2 class="h2" style="margin-top:16px">' + ln('Работы') + ln('<em>студии</em>', 90) + '</h2></div>' + marq() + '</section>' };
   });
 
@@ -117,12 +119,12 @@
   A.route('/kontakty', function () {
     A.onScroll = null;
     return { html: '<section class="khero"><div class="wrap khero__g"><div><span class="cap rv">Контакты</span><h1 class="h1" style="margin:16px 0 24px">' + ln('Напишите') + ln('<em>Алине</em>', 90) + '</h1>' +
-      '<p class="lead rv">Москва, адрес уточняется · ежедневно 10:00–21:00<br>+7 936 287-22-01 · academy.nail@mail.ru</p>' +
-      '<div class="hero__acts rv" style="margin-top:26px"><a class="btn" href="https://t.me/alina_sergeevna28">Telegram</a><a class="btn btn--ghost" href="https://wa.me/79362872201">WhatsApp</a></div></div>' +
+      '<p class="lead rv" data-noedit>' + E(A.ct('addr')) + ' · ' + E(A.ct('hours')) + '<br>' + E(A.ct('phone')) + ' · ' + E(A.ct('email')) + '</p>' +
+      '<div class="hero__acts rv" style="margin-top:26px"><a class="btn" data-ct="tg" href="https://t.me/' + E(A.ct('tg')) + '">Telegram</a><a class="btn btn--ghost" href="https://wa.me/' + E(A.ct('wa')) + '">WhatsApp</a></div></div>' +
       '<form class="cardx rv" id="lf"><h2>Оставить <em class="serif" style="color:var(--fu)">заявку</em></h2><p class="muted" style="margin:-6px 0 16px">Ответим в течение дня и подберём курс</p>' +
       '<div class="fld"><label for="ln">Имя</label><input class="inp" id="ln" required placeholder="Как к вам обращаться"></div>' +
       '<div class="fld"><label for="lp">Телефон</label><input class="inp" id="lp" type="tel" required placeholder="+7"></div>' +
-      '<div class="fld"><label for="lc">Интересует</label><select class="inp" id="lc">' + COURSES.map(function (c) { return '<option value="' + c.id + '">' + E(c.t) + ' · ' + (c.f === 'online' ? 'онлайн' : 'офлайн') + '</option>'; }).join('') + '</select></div>' +
+      '<div class="fld"><label for="lc">Интересует</label><select class="inp" id="lc">' + A.pub().map(function (c) { return '<option value="' + c.id + '">' + E(c.t) + ' · ' + (c.f === 'online' ? 'онлайн' : 'офлайн') + '</option>'; }).join('') + '</select></div>' +
       '<div class="fld"><label for="lm">Комментарий</label><textarea class="inp" id="lm" placeholder="Есть ли опыт, удобное время для звонка"></textarea></div>' +
       A.consent('lcn') + '<button class="btn" style="width:100%;margin-top:12px">Отправить заявку</button></form></div></section>',
       mount: function (v) {

@@ -34,7 +34,7 @@
       x.mod = k; x.mt = md.t; x.j = j; x.m = x.m || 12 + (out.length * 7) % 20;
       x.d = x.d || 'Описание урока появится, когда Алина загрузит видео.';
       x.pts = x.pts || ['Теория простым языком', 'Демонстрация на модели', 'Типичные ошибки и как их избежать'];
-      x.tc = x.tc || [['00:00', 'Вступление'], ['03:00', 'Теория'], ['08:00', 'Практика']];
+      x.tc = x.tc || [['00:00', 'Вступление'], ['03:00', 'Теория'], ['08:00', 'Практика']]; x.ask = x.ask !== false;
       out.push(x);
     }); });
     // тип урока: теория / тест / практика (задание с проверкой). Алина меняет тип в CRM → «Курсы»
@@ -143,6 +143,7 @@
     menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h16M4 16h16"/></svg>',
     cam: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
     doc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/></svg>',
+    edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg>',
     lock: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
   };
 
@@ -165,6 +166,7 @@
       D.body.classList.toggle('app', isApp);
       D.getElementById('hdr').hidden = isApp; D.getElementById('foot').hidden = isApp || m.base === '/vhod';
       view.innerHTML = typeof out === 'string' ? out : out.html;
+      if (A.cmsApply) A.cmsApply(view, m); if (!/^\/(kabinet|crm)$/.test(m.base)) { var eb = D.getElementById('cmsbar'); if (eb && !A.editing()) eb.remove(); }
       if (!sameSection) scrollTo(0, 0);
       var nb = { '/kurs': '/akademiya' }[m.base] || m.base; D.querySelectorAll('.nav a,.mnav a').forEach(function (a) { if (a.getAttribute('href') === '#' + nb) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
       if (out.mount) out.mount(view);
@@ -175,7 +177,7 @@
     if (first || A.rm || sameSection) { first = false; swap(); return; }
     var toApp = (m.base === '/kabinet' || m.base === '/crm') && !(curPath && (curPath.base === '/kabinet' || curPath.base === '/crm'));
     curtain.classList.toggle('quick', !toApp);
-    if (toApp) { D.getElementById('brandS').textContent = m.base === '/crm' ? 'кабинет куратора' : 'личный кабинет'; }
+    if (toApp) { D.getElementById('brandS').textContent = m.base === '/crm' ? '' : 'личный кабинет'; }
     curtain.classList.remove('out'); void curtain.offsetWidth; curtain.classList.add('in');
     setTimeout(function () { swap(); curtain.classList.remove('in'); curtain.classList.add('out'); setTimeout(function () { curtain.classList.remove('out'); }, 700); }, toApp ? 1900 : 620);
   }
@@ -230,7 +232,7 @@
   });
   A.toggleTheme = function () { A.setTheme(D.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); };
   A.start = function () {
-    var th = D.getElementById('thm'); if (th) th.onclick = A.toggleTheme;
+    var th = D.getElementById('thm'); if (th) th.onclick = A.toggleTheme; if (A.applyCt) A.applyCt();
     // тайная дверь в CRM: удерживать «©» в подвале ~1 секунду
     var cp = D.getElementById('cpr'), ht = 0;
     if (cp) { var stop = function () { clearTimeout(ht); cp.classList.remove('hold'); };
