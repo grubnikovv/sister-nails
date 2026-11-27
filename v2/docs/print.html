@@ -1,0 +1,28 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Документ</title><meta name="robots" content="noindex">
+<link rel="stylesheet" href="../app.css">
+<style>
+@page{size:A4;margin:22mm 18mm 20mm}
+html,body{background:#fff!important;color:#0E1A33}
+.pd{max-width:none;font:400 10.5pt/1.6 var(--sans)}
+.pd__h{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:14px;border-bottom:1px solid #d9d2c8;margin-bottom:26px}
+.pd__h .lgo{font-size:30px;color:#0E1A33}
+.pd__h small{font-size:8.5pt;color:#6b6f7c;text-align:right;line-height:1.5}
+.pd h1{font:500 26pt/1.05 var(--serif);margin:0 0 6px}
+.pd .meta{color:#6b6f7c;font-size:9pt;margin-bottom:22px}
+.pd h2{font:500 15pt/1.2 var(--serif);margin:20px 0 8px;break-after:avoid}
+.pd h3{font:600 10.5pt/1.4 var(--sans);margin:12px 0 6px;break-after:avoid}
+.pd p{margin:0 0 7px;text-align:justify;hyphens:auto}
+.pd ul{margin:0 0 8px;padding-left:16px;list-style:disc}.pd li{margin:2px 0}
+.pd a{color:#C8006A}
+.pd .req{grid-template-columns:150px 1fr;gap:4px 14px;font-size:9.5pt}.pd .req dt{font-size:8pt}
+.pd__r{margin-top:24px;padding:14px 16px;border:1px solid #e5ded4;border-radius:10px;break-inside:avoid}
+</style></head><body>
+<div class="pd" id="pd"></div>
+<script src="../js/docs.js"></script>
+<script>
+var id=new URLSearchParams(location.search).get('id'),d=DOCS.filter(function(x){return x.id===id})[0],R=DOCS.filter(function(x){return x.id==='rekvizity'})[0];
+var LG='<span class="lgo"><span class="wm"><img class="wm__w" src="../../img/me-word-l.webp" alt="Мэй’Эйлин" width="1832" height="420" style="height:1.05em;width:auto;max-width:4.5em"></span><svg class="lgo__s" style="max-height:.3em" viewBox="0 0 1000 66" aria-hidden="true"><text x="500" y="52" text-anchor="middle" textLength="996" lengthAdjust="spacing" font-family="Onest,system-ui,sans-serif" font-weight="500" font-size="62" fill="currentColor">АКАДЕМИЯ &amp; НЕЙЛ СТУДИЯ</text></svg></span>';
+document.title=d.t;
+document.getElementById('pd').innerHTML='<div class="pd__h">'+LG+'<small>ИП Грубникова Алина Сергеевна<br>ИНН 345600043182 · ОГРНИП 325344300003940<br>academy.nail@mail.ru · +7 (936) 287-22-01</small></div><h1>'+d.t+'</h1><div class="meta">Редакция от '+d.date+' · сайт academy-nail.ru</div>'+
+ d.s.map(function(x){return (x.h?'<h2>'+x.h+'</h2>':'')+x.html.replace(/href="#\/dokumenty\/(\w+)"/g,'href="https://academy-nail.ru/#/dokumenty/$1"')}).join('')+(d.req?'<div class="pd__r"><h2 style="margin-top:0">Реквизиты исполнителя</h2>'+R.s[0].html+'</div>':'');
+</script></body></html>
